@@ -1,4 +1,4 @@
-package org.eltonkola.tvpulse
+package org.eltonkola.tvpulse.expect
 
 import platform.UIKit.UIDevice
 

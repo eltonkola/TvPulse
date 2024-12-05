@@ -1,77 +1,65 @@
 package org.eltonkola.tvpulse.ui
 
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Colors
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.launch
-import org.eltonkola.tvpulse.model.TvShow
-import org.eltonkola.tvpulse.service.TvDbApiService
+import coil3.compose.AsyncImage
+import org.eltonkola.tvpulse.data.model.TvShow
+import org.eltonkola.tvpulse.data.model.TvShowResponse
+import org.eltonkola.tvpulse.data.service.TmdbApiClient
+
 
 @Composable
-fun TrendingShowsScreen() {
-    val apiService = remember { TvDbApiService() }
-    var tvShows by remember { mutableStateOf<List<TvShow>>(emptyList()) }
-    var isLoading by remember { mutableStateOf(true) }
-    var error by remember { mutableStateOf<String?>(null) }
-
-    val scope = rememberCoroutineScope()
+fun TrendingShowsScreen(apiClient: TmdbApiClient = TmdbApiClient()) {
+    var tvShow by remember { mutableStateOf<TvShowResponse?>(null) }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
 
     LaunchedEffect(Unit) {
         try {
-            val response = apiService.getTrendingTvShows()
-            tvShows = response.results
-            isLoading = false
+            tvShow = apiClient.getTrendingTvShows()
         } catch (e: Exception) {
-            error = e.message
-            isLoading = false
+            errorMessage = e.message
         }
     }
 
-    when {
-        isLoading -> {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
+    if (errorMessage != null) {
+        Text("Error: $errorMessage")
+    } else if (tvShow != null) {
+        LazyColumn() {
+
+            items(tvShow?.results!!){ tvShow ->
+                TvShowItem(tvShow)
+                Spacer(modifier = Modifier.height(1.dp).fillMaxWidth().background(Color.Gray))
             }
+
         }
-        error != null -> {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text("Error: ${error}")
-            }
-        }
-        else -> {
-            LazyColumn {
-                items(tvShows) { show ->
-                    TvShowItem(show)
-                }
-            }
-        }
+    } else {
+        CircularProgressIndicator()
     }
 }
 
 @Composable
-fun TvShowItem(show: TvShow) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-    ) {
-        Text(text = show.name, style = MaterialTheme.typography.h6)
-        Spacer(modifier = Modifier.height(8.dp))
-        show.overview?.let {
-            Text(text = it, style = MaterialTheme.typography.body2)
-        }
-        show.voteAverage?.let {
-            Text(
-                text = "Rating: ${String.format("%.1f", it)}",
-                style = MaterialTheme.typography.caption
+fun TvShowItem(tvShow: TvShow) {
+    Column(modifier = Modifier.fillMaxWidth()) {
+
+        Text("Name: ${tvShow!!.name}")
+        Text("Overview: ${tvShow!!.overview}")
+        Text("First Air Date: ${tvShow!!.first_air_date}")
+        tvShow.poster_path?.let { posterPath ->
+            AsyncImage(
+                model = "https://image.tmdb.org/t/p/w500$posterPath",
+                contentDescription = "Poster of ${tvShow.name}"
             )
         }
     }

@@ -50,6 +50,14 @@ kotlin {
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization.kotlinx.json)
+            implementation(libs.ktor.client.cio)
+
+
+          //  implementation(libs.bundles.ktor.common)
+            implementation(libs.coil.compose.core)
+            implementation(libs.coil.compose)
+            implementation(libs.coil)
+            implementation(libs.coil.network.ktor)
 
             // Serialization
             implementation(libs.kotlinx.serialization.json)
@@ -70,6 +78,17 @@ kotlin {
             implementation(libs.kotlinx.datetime)
 
         }
+
+        val androidMain by getting {
+            dependencies {
+                implementation(libs.ktor.client.okhttp)
+                implementation(libs.ktor.client.android)
+            }
+        }
+        iosMain.dependencies {
+            implementation(libs.ktor.client.darwin)
+        }
+
     }
 }
 

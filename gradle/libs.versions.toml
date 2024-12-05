@@ -15,7 +15,8 @@ compose-multiplatform = "1.7.1"
 junit = "4.13.2"
 kotlin = "2.0.21"
 kotlinxSerializationJson = "1.6.3"
-ktorClientCore = "2.3.6"
+ktorClientCio = "2.3.12"
+ktorClientCore = "2.3.12"
 multiplatformSettings = "1.1.1"
 sonner = "0.3.8"
 kermit = "2.0.4"
@@ -25,6 +26,7 @@ kotlinxDatetime = "0.6.0"
 navigationCompose = "2.7.0-alpha07"
 lifecycleViewmodelCompose = "2.8.0"
 iconsLucide = "1.0.0"
+coilComposeCore = "3.0.0-alpha06"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -40,6 +42,8 @@ androidx-activity-compose = { module = "androidx.activity:activity-compose", ver
 androidx-lifecycle-viewmodel = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-runtime-compose = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktorClientCore" }
+ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktorClientCio" }
 ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktorClientCore" }
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktorClientCore" }
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktorClientCore" }
@@ -56,6 +60,15 @@ multiplatform-settings-no-arg = { module = "com.russhwolf:multiplatform-settings
 sonner = { module = "io.github.dokar3:sonner", version.ref = "sonner" }
 kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }
 icons-lucide = { module = "com.composables:icons-lucide", version.ref = "iconsLucide" }
+
+
+coil = { module = "io.coil-kt.coil3:coil", version.ref = "coilComposeCore" }
+coil-compose-core = { module = "io.coil-kt.coil3:coil-compose-core", version.ref = "coilComposeCore" }
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilComposeCore" }
+coil-network-ktor = { module = "io.coil-kt.coil3:coil-network-ktor", version.ref = "coilComposeCore" }
+ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktorClientCore" }
+ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktorClientCore" }
+
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
