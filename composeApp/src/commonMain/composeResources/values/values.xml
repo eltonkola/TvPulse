@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">Tv Pulse</string>
+
+    <string name="slogan_1">Unleash Your Best Self Every Day.</string>
+    <string name="slogan_2">Your Journey to a Healthier You.</string>
+    <string name="slogan_3">Transform. Thrive. Be Your Best.</string>
+    <string name="slogan_4">Where Every Day Brings a Better You.</string>
+    <string name="slogan_5">Elevate Your Fitness, Elevate Your Life.</string>
+    <string name="slogan_6">Your Path to Wellness Starts Here.</string>
+    <string name="slogan_7">Empowering You to Be Your Best.</string>
+    <string name="slogan_8">Stronger, Happier, Healthier – The Best You.</string>
+    <string name="slogan_9">Find Your Best. Be Your Best.</string>
+    <string name="slogan_10">From Good to Great, Become the Best You.</string>
+
+
+    <string name="terms_title">Terms of Service</string>
+    <string name="terms_body">
+Welcome to TV Pulse, a free and open-source app built by a single human (hi, that's me 👋). This is a passion project, so please be kind—I'm just trying my best here!
+
+The Highlights:
+Your Data Stays Local: Everything stays on your device. No servers, no clouds, just your TV obsessions.
+No Tracking, Ever: I don't care what you watch or where you watch it. No tracking, no snooping, zero ads.
+Open Source Magic: Feel free to poke around the code, suggest fixes, or laugh at my spaghetti logic on GitHub.
+No Warranties: If the app breaks, catches fire, or somehow causes you to binge a terrible show, I can't be held responsible.
+By using TV Pulse, you agree to chill, enjoy, and maybe even contribute. ❤️
+
+That’s it. Have fun tracking your TV life!
+</string>
+    <string name="terms_failed">Close the app, and uninstall it you don\'t agree to these terms!</string>
+
+
+    <string name="level_tab_1">Tv Shows</string>
+    <string name="level_tab_2">Movies</string>
+    <string name="level_tab_3">Discover</string>
+    <string name="level_tab_4">Settings</string>
+
+</resources>

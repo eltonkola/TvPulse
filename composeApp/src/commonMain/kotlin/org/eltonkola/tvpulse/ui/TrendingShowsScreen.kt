@@ -5,12 +5,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Colors
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -53,9 +50,9 @@ fun TrendingShowsScreen(apiClient: TmdbApiClient = TmdbApiClient()) {
 fun TvShowItem(tvShow: TvShow) {
     Column(modifier = Modifier.fillMaxWidth()) {
 
-        Text("Name: ${tvShow!!.name}")
-        Text("Overview: ${tvShow!!.overview}")
-        Text("First Air Date: ${tvShow!!.first_air_date}")
+        Text("Name: ${tvShow.name}")
+        Text("Overview: ${tvShow.overview}")
+        Text("First Air Date: ${tvShow.first_air_date}")
         tvShow.poster_path?.let { posterPath ->
             AsyncImage(
                 model = "https://image.tmdb.org/t/p/w500$posterPath",
