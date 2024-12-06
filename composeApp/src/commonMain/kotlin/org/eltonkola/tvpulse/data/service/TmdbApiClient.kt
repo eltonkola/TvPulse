@@ -36,7 +36,11 @@ class TmdbApiClient() {
 
     private val baseUrl = "https://api.themoviedb.org/3"
 
-        suspend fun getTrendingTvShows(): TvShowResponse {
+    val json = Json {
+        ignoreUnknownKeys = true // Ignores unknown keys in the JSON
+    }
+
+    suspend fun getTrendingTvShows(): TvShowResponse {
         val endpoint = "$baseUrl/trending/tv/day?language=en-US"
         return try {
 
@@ -48,7 +52,32 @@ class TmdbApiClient() {
             if (response.status.isSuccess()) {
                 val responseBody = response.bodyAsText()
                 Logger.i { "responseBody: $responseBody" }
-                Json.decodeFromString<TvShowResponse>(responseBody)
+                json.decodeFromString<TvShowResponse>(responseBody)
+            } else {
+
+                throw Exception("API returned error: ${response.status.value} ${response.status.description}")
+            }
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+            throw Exception("Error fetching latest TV shows: ${e.message}")
+
+        }
+    }
+
+    suspend fun getTrendingMovies(): TvShowResponse {
+        val endpoint = "$baseUrl/trending/movie/day?language=en-US"
+        return try {
+
+            val response: HttpResponse = client.get(endpoint) {
+                header(HttpHeaders.Authorization, "Bearer $bearerToken")
+                header(HttpHeaders.Accept, "application/json")
+            }
+
+            if (response.status.isSuccess()) {
+                val responseBody = response.bodyAsText()
+                Logger.i { "responseBody: $responseBody" }
+                json.decodeFromString<TvShowResponse>(responseBody)
             } else {
 
                 throw Exception("API returned error: ${response.status.value} ${response.status.description}")

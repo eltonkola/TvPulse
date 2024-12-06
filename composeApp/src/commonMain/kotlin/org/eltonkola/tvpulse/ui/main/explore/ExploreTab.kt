@@ -13,20 +13,23 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.composables.icons.lucide.Activity
 import com.composables.icons.lucide.Lucide
-import kotlinx.datetime.Clock
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
-import org.eltonkola.tvpulse.ui.TrendingShowsScreen
+import org.eltonkola.tvpulse.ui.components.DoubleTabScreen
 
 
 @Composable
 fun ExploreTab(
     navController: NavController,
 ) {
-
-
-    TrendingShowsScreen()
-
+    DoubleTabScreen(
+        tab1Name = "Shows",
+        tab1Content = {
+            TrendingShowsScreen()
+        },
+        tab2Name = "Movies",
+        tab2Content = {
+            TrendingMoviesScreen()
+        }
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -34,20 +37,20 @@ fun ExploreTab(
 fun ExploreAppBar(
     navController: NavController
 ) {
-    TopAppBar(
-        title = {
-            Row {
-                Icon(Lucide.Activity, null)
-                Spacer(modifier = Modifier.width(12.dp))
-                Text(text = "Explore")
-            }
-        },
-        actions = {
-//            IconButton( {
-//                navController.navigate(AppsScreen.Exercises.name)
-//            }){
-//                Icon(Lucide.BicepsFlexed, null)
+//    TopAppBar(
+//        title = {
+//            Row {
+//                Icon(Lucide.Activity, null)
+//                Spacer(modifier = Modifier.width(12.dp))
+//                Text(text = "Explore")
 //            }
-        }
-    )
+//        },
+//        actions = {
+////            IconButton( {
+////                navController.navigate(AppsScreen.Exercises.name)
+////            }){
+////                Icon(Lucide.BicepsFlexed, null)
+////            }
+//        }
+//    )
 }
