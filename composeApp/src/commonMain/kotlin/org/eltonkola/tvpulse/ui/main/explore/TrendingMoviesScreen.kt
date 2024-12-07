@@ -45,8 +45,7 @@ fun TrendingMoviesScreen(apiClient: TmdbApiClient = DiGraph.tmdbApiClient) {
                     icon = Lucide.Film,
                     title = movie.title,
                     country = movie.original_language,
-                    subtitle = " · " +
-                            "📅 ${formatDateToHumanReadable(movie.release_date)} · " +
+                    subtitle = "${formatDateToHumanReadable(movie.release_date)} · " +
                             "⭐ ${movie.vote_average}/10 (${movie.vote_count} votes)",
                     added = false,
                     backgroundUrl = "https://image.tmdb.org/t/p/w500${movie.backdrop_path}"

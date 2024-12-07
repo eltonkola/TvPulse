@@ -22,8 +22,8 @@ import com.composables.icons.lucide.BookmarkCheck
 import com.composables.icons.lucide.Check
 import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.Plus
-
 import dev.carlsen.flagkit.FlagKit
+
 
 @Composable
 fun ExploreCard(
@@ -126,11 +126,11 @@ fun ExploreCard(
                 ) {
 
                     Image(
-                        imageVector  = FlagKit.getFlag(country),
+                        imageVector  = FlagKit.getFlag(country) ?: FlagKit.getFlag("us")!!,
                         contentDescription = country,
-                        modifier = Modifier.size(24.dp)
+                        modifier = Modifier.size(16.dp)
                     )
-//                    Spacer(modifier = Modifier.size(8.dp))
+                    Spacer(modifier = Modifier.size(4.dp))
 
                     Text(
                         text = subtitle,

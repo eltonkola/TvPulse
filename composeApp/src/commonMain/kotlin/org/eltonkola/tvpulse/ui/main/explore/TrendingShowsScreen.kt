@@ -47,8 +47,7 @@ fun TrendingShowsScreen(apiClient: TmdbApiClient = DiGraph.tmdbApiClient) {
                     icon = Lucide.Tv,
                     title = tvShow.name,
                     country = tvShow.origin_country.first(),
-                    subtitle = " · " +
-                            "\uD83D\uDCC5 ${formatDateToHumanReadable(tvShow.first_air_date)} · " +
+                    subtitle = "${formatDateToHumanReadable(tvShow.first_air_date)} · " +
                             "⭐ ${tvShow.vote_average}/10 (${tvShow.vote_count} votes)",
                     added = false,
                     backgroundUrl = "https://image.tmdb.org/t/p/w500${tvShow.backdrop_path}"
