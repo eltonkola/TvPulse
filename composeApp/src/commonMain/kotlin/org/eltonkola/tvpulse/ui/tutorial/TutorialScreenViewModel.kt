@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import org.eltonkola.tvpulse.DiGraph
-import org.eltonkola.tvpulse.data.AppSettings
+import org.eltonkola.tvpulse.data.local.AppSettings
 
 data class LandingUiState(
     val acceptedTerms: Boolean,

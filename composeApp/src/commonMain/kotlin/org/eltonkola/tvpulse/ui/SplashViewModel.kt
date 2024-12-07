@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.eltonkola.tvpulse.DiGraph
-import org.eltonkola.tvpulse.data.AppSettings
+import org.eltonkola.tvpulse.data.local.AppSettings
 
 sealed class SplashOpState{
     data object Loading : SplashOpState()

@@ -3,7 +3,9 @@ package org.eltonkola.tvpulse
 import com.russhwolf.settings.Settings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import org.eltonkola.tvpulse.data.AppSettings
+import org.eltonkola.tvpulse.data.db.DbManager
+import org.eltonkola.tvpulse.data.local.AppSettings
+import org.eltonkola.tvpulse.data.remote.service.TmdbApiClient
 
 object DiGraph {
 
@@ -11,8 +13,11 @@ object DiGraph {
     private var coroutineScope = CoroutineScope(appDispatcher)
 
     private val settings: Settings = Settings()
-//    private val dbManager: DbManager = DbManager()
+    private val dbManager: DbManager = DbManager()
     val appSettings = AppSettings(settings)
+
+    val tmdbApiClient: TmdbApiClient = TmdbApiClient()
+
 //
 //    val exerciseLoader = ExerciseLoader(coroutineScope)
 //

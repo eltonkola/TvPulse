@@ -16,8 +16,8 @@ import coil3.compose.setSingletonImageLoaderFactory
 import coil3.request.CachePolicy
 import coil3.request.crossfade
 import org.eltonkola.tvpulse.DiGraph
-import org.eltonkola.tvpulse.data.AppSettings
-import org.eltonkola.tvpulse.data.AppsScreen
+import org.eltonkola.tvpulse.data.local.AppSettings
+import org.eltonkola.tvpulse.data.local.model.AppsScreen
 import org.eltonkola.tvpulse.ui.main.MainScreen
 import org.eltonkola.tvpulse.ui.splash.SplashScreen
 import org.eltonkola.tvpulse.ui.theme.TvPulseTheme

@@ -1,4 +1,4 @@
-package org.eltonkola.tvpulse.data
+package org.eltonkola.tvpulse.data.local.model
 
 enum class AppsScreen(val title: String) {
     Splash(title = "splash"),

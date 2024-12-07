@@ -12,15 +12,17 @@ import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.Tv
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.toLocalDate
-import org.eltonkola.tvpulse.data.model.TvShowResponse
-import org.eltonkola.tvpulse.data.service.TmdbApiClient
+import org.eltonkola.tvpulse.DiGraph
+import org.eltonkola.tvpulse.data.remote.model.TmdbListResponse
+import org.eltonkola.tvpulse.data.remote.model.TvShowDetails
+import org.eltonkola.tvpulse.data.remote.service.TmdbApiClient
 import org.eltonkola.tvpulse.ui.components.ExploreCard
 import org.eltonkola.tvpulse.ui.components.LoadingUi
 
 
 @Composable
-fun TrendingShowsScreen(apiClient: TmdbApiClient = TmdbApiClient()) {
-    var tvShow by remember { mutableStateOf<TvShowResponse?>(null) }
+fun TrendingShowsScreen(apiClient: TmdbApiClient = DiGraph.tmdbApiClient) {
+    var tvShow by remember { mutableStateOf<TmdbListResponse<TvShowDetails>?>(null) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
     LaunchedEffect(Unit) {
@@ -44,13 +46,18 @@ fun TrendingShowsScreen(apiClient: TmdbApiClient = TmdbApiClient()) {
                     modifier = Modifier.fillMaxWidth(),
                     icon = Lucide.Tv,
                     title = tvShow.name,
-                    subtitle = "${tvShow.origin_country.first()} - ${formatDateToHumanReadable(tvShow.first_air_date?: "")} - ${tvShow.vote_average}",
+                    country = tvShow.origin_country.first(),
+                    subtitle = " · " +
+                            "\uD83D\uDCC5 ${formatDateToHumanReadable(tvShow.first_air_date)} · " +
+                            "⭐ ${tvShow.vote_average}/10 (${tvShow.vote_count} votes)",
                     added = false,
                     backgroundUrl = "https://image.tmdb.org/t/p/w500${tvShow.backdrop_path}"
                 )
+
             }
 
         }
+
     } else {
         LoadingUi()
     }
@@ -72,3 +79,4 @@ fun formatDateToHumanReadable(dateString: String): String {
         dateString // Handle invalid input
     }
 }
+

@@ -1,4 +1,4 @@
-package org.eltonkola.tvpulse.data
+package org.eltonkola.tvpulse.data.local
 
 
 import co.touchlab.kermit.Logger

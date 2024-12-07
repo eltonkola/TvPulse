@@ -1,16 +1,17 @@
-package org.eltonkola.tvpulse.data.service
+package org.eltonkola.tvpulse.data.remote.service
 
 import co.touchlab.kermit.Logger
 import io.ktor.client.*
 import io.ktor.client.request.*
-import io.ktor.client.call.* // Import to use response.body<T>()
 import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpHeaders
 import io.ktor.http.isSuccess
 import kotlinx.serialization.json.Json
-import org.eltonkola.tvpulse.data.model.TvShowResponse
 import io.ktor.client.engine.cio.*
+import org.eltonkola.tvpulse.data.remote.model.MovieDetails
+import org.eltonkola.tvpulse.data.remote.model.TmdbListResponse
+import org.eltonkola.tvpulse.data.remote.model.TvShowDetails
 
 class TmdbApiClient() {
 
@@ -40,7 +41,7 @@ class TmdbApiClient() {
         ignoreUnknownKeys = true // Ignores unknown keys in the JSON
     }
 
-    suspend fun getTrendingTvShows(): TvShowResponse {
+    suspend fun getTrendingTvShows(): TmdbListResponse<TvShowDetails> {
         val endpoint = "$baseUrl/trending/tv/day?language=en-US"
         return try {
 
@@ -52,7 +53,7 @@ class TmdbApiClient() {
             if (response.status.isSuccess()) {
                 val responseBody = response.bodyAsText()
                 Logger.i { "responseBody: $responseBody" }
-                json.decodeFromString<TvShowResponse>(responseBody)
+                json.decodeFromString<TmdbListResponse<TvShowDetails>>(responseBody)
             } else {
 
                 throw Exception("API returned error: ${response.status.value} ${response.status.description}")
@@ -65,7 +66,7 @@ class TmdbApiClient() {
         }
     }
 
-    suspend fun getTrendingMovies(): TvShowResponse {
+    suspend fun getTrendingMovies(): TmdbListResponse<MovieDetails> {
         val endpoint = "$baseUrl/trending/movie/day?language=en-US"
         return try {
 
@@ -77,7 +78,7 @@ class TmdbApiClient() {
             if (response.status.isSuccess()) {
                 val responseBody = response.bodyAsText()
                 Logger.i { "responseBody: $responseBody" }
-                json.decodeFromString<TvShowResponse>(responseBody)
+                json.decodeFromString<TmdbListResponse<MovieDetails>>(responseBody)
             } else {
 
                 throw Exception("API returned error: ${response.status.value} ${response.status.description}")

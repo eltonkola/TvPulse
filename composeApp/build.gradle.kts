@@ -68,6 +68,7 @@ kotlin {
             implementation(libs.multiplatform.settings.no.arg)
 
             implementation(libs.sonner)
+            implementation(libs.flagkit)
 
             implementation(libs.kermit)
 

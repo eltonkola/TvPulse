@@ -1,6 +1,7 @@
 package org.eltonkola.tvpulse.ui.components
 
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -22,12 +23,15 @@ import com.composables.icons.lucide.Check
 import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.Plus
 
+import dev.carlsen.flagkit.FlagKit
+
 @Composable
 fun ExploreCard(
     modifier: Modifier = Modifier,
     icon: ImageVector,
     title: String,
     subtitle: String,
+    country: String,
     added: Boolean = false,
     onAdd: () -> Unit = {},
     backgroundUrl: String
@@ -120,6 +124,14 @@ fun ExploreCard(
                     modifier = Modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp, bottom = 8.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
+
+                    Image(
+                        imageVector  = FlagKit.getFlag(country),
+                        contentDescription = country,
+                        modifier = Modifier.size(24.dp)
+                    )
+//                    Spacer(modifier = Modifier.size(8.dp))
+
                     Text(
                         text = subtitle,
                         modifier = Modifier.fillMaxWidth(),

@@ -21,11 +21,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.composables.icons.lucide.Activity
 import com.composables.icons.lucide.Lucide
-import kotlinx.datetime.Clock
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 import org.eltonkola.tvpulse.DiGraph
-import org.eltonkola.tvpulse.data.AppSettings
+import org.eltonkola.tvpulse.data.local.AppSettings
 
 
 @Composable
