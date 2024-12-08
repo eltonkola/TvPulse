@@ -57,8 +57,9 @@ class TmdbApiClient {
     }
 
 
-    suspend fun getTrendingTvShows(): TmdbListResponse<TrendingTvShowDetails> {
-        val endpoint = "$baseUrl/trending/tv/day?language=en-US"
+    suspend fun getTrendingTvShows(page: Int, pageSize: Int): TmdbListResponse<TrendingTvShowDetails> {
+        val endpoint = "$baseUrl/trending/tv/day?language=en-US&page=$page"//&pageSize=$pageSize
+        Logger.i( "endpoint: $endpoint" )
         return fetchFromApi(endpoint)
     }
 

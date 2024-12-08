@@ -78,6 +78,10 @@ kotlin {
             implementation(libs.lifecycle.viewmodel.compose)
             implementation(libs.kotlinx.datetime)
 
+
+            implementation(libs.paging.compose.common)
+            implementation(libs.paging.common)
+
         }
 
         val androidMain by getting {

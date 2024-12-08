@@ -19,6 +19,7 @@ kotlinxSerializationJson = "1.6.3"
 ktorClientCio = "2.3.12"
 ktorClientCore = "2.3.12"
 multiplatformSettings = "1.1.1"
+pagingComposeCommon = "3.3.0-alpha02-0.5.1"
 sonner = "0.3.8"
 kermit = "2.0.4"
 realm = "2.3.0"
@@ -27,7 +28,8 @@ kotlinxDatetime = "0.6.0"
 navigationCompose = "2.7.0-alpha07"
 lifecycleViewmodelCompose = "2.8.0"
 iconsLucide = "1.0.0"
-coilComposeCore = "3.0.0-alpha06"
+coilComposeCore = "3.0.4"
+coilComposeCoreNetwork = "3.0.0-alpha08"
 
 [libraries]
 flagkit = { module = "dev.carlsen.flagkit:flagkit", version.ref = "flagkit" }
@@ -56,6 +58,8 @@ kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 lifecycle-viewmodel-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleViewmodelCompose" }
 
+paging-common = { module = "app.cash.paging:paging-common", version.ref = "pagingComposeCommon" }
+paging-compose-common = { module = "app.cash.paging:paging-compose-common", version.ref = "pagingComposeCommon" }
 realm = { module = "io.realm.kotlin:library-base", version.ref = "realm" }
 multiplatform-settings = { module = "com.russhwolf:multiplatform-settings", version.ref = "multiplatformSettings" }
 multiplatform-settings-no-arg = { module = "com.russhwolf:multiplatform-settings-no-arg", version.ref = "multiplatformSettings" }
@@ -67,7 +71,8 @@ icons-lucide = { module = "com.composables:icons-lucide", version.ref = "iconsLu
 coil = { module = "io.coil-kt.coil3:coil", version.ref = "coilComposeCore" }
 coil-compose-core = { module = "io.coil-kt.coil3:coil-compose-core", version.ref = "coilComposeCore" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilComposeCore" }
-coil-network-ktor = { module = "io.coil-kt.coil3:coil-network-ktor", version.ref = "coilComposeCore" }
+coil-network-ktor = { module = "io.coil-kt.coil3:coil-network-ktor", version.ref = "coilComposeCoreNetwork" }
+
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktorClientCore" }
 ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktorClientCore" }
 

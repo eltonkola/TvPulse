@@ -6,6 +6,7 @@ import kotlinx.coroutines.Dispatchers
 import org.eltonkola.tvpulse.data.db.DbManager
 import org.eltonkola.tvpulse.data.local.AppSettings
 import org.eltonkola.tvpulse.data.local.MediaRepository
+import org.eltonkola.tvpulse.data.remote.repository.TrendingRepository
 import org.eltonkola.tvpulse.data.remote.service.TmdbApiClient
 
 object DiGraph {
@@ -22,6 +23,11 @@ object DiGraph {
     val mediaRepository: MediaRepository by lazy {
         MediaRepository(dbManager, tmdbApiClient)
     }
+
+    val trendingRepository: TrendingRepository by lazy {
+        TrendingRepository(tmdbApiClient)
+    }
+
 
 //    val contactsRepository: ContactsRepository by lazy {
 //        ContactsRepository(coroutineScope = coroutineScope, dbManager = dbManager)
