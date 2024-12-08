@@ -58,26 +58,3 @@ fun SettingsTab(
 
 
 }
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun SettingsAppBar(
-    navController: NavController
-) {
-    TopAppBar(
-        title = {
-            Row {
-                Icon(Lucide.Activity, null)
-                Spacer(modifier = Modifier.width(12.dp))
-                Text(text = "Settings")
-            }
-        },
-        actions = {
-//            IconButton( {
-//                navController.navigate(AppsScreen.Exercises.name)
-//            }){
-//                Icon(Lucide.BicepsFlexed, null)
-//            }
-        }
-    )
-}

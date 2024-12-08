@@ -51,7 +51,7 @@ fun ExploreCard(
               //  .background(MaterialTheme.colorScheme.secondaryContainer)
         ) {
             AsyncImage(
-                model = backgroundUrl,
+                model = "https://image.tmdb.org/t/p/w500/$backgroundUrl" ,
                 contentDescription = "Background",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize()
@@ -79,7 +79,6 @@ fun ExploreCard(
                 ) {
 
                     Box(
-                      //  enabled = !added,
                         modifier = Modifier
                             .border(
                                 width = 1.dp,
@@ -89,7 +88,7 @@ fun ExploreCard(
                             .clip(RoundedCornerShape(8.dp))
                             .background(
                                     MaterialTheme.colorScheme.surface.copy(alpha = 0.8f),
-                            ).clickable(enabled = added, onClick = onAdd).padding(6.dp)
+                            ).clickable(enabled = !added, onClick = onAdd).padding(6.dp)
 
                         ) {
                         Icon(

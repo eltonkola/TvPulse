@@ -5,7 +5,7 @@ import io.realm.kotlin.types.RealmList
 import io.realm.kotlin.types.RealmObject
 import io.realm.kotlin.types.annotations.PrimaryKey
 
-enum class MediaType(val type: String) {
+enum class MediaType(val mediaType: String) {
     MOVIE("movie"),
     TV_SHOW ("tv")
 }
@@ -22,7 +22,7 @@ class MediaEntity : RealmObject {
     @PrimaryKey
     var id: Int = 0
     var title: String = ""
-    var type: String = MediaType.TV_SHOW.type
+    var type: String = MediaType.TV_SHOW.mediaType
     var posterPath: String? = null
     var backdropPath: String? = null
     var overview: String? = null
@@ -38,9 +38,9 @@ class MediaEntity : RealmObject {
     var personalNotes: String? = null
 
     // Minimal stats
-    var voteAverage: Float = 0f
+    var voteAverage: Double = 0.0
     var voteCount: Int = 0
-    var popularity: Float = 0f
+    var popularity: Double = 0.0
 
     // For TV Shows
     var numberOfSeasons: Int = 0
@@ -51,9 +51,9 @@ class MediaEntity : RealmObject {
 
 
     var mediaType: MediaType
-        get() = MediaType.entries.first { it.type == type }
+        get() = MediaType.entries.first { it.mediaType == type }
         set(value) {
-            type = value.type
+            type = value.mediaType
         }
 
     var mediaStatus: WatchStatus

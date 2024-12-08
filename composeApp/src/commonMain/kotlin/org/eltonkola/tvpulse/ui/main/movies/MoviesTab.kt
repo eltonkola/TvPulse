@@ -1,51 +1,97 @@
 package org.eltonkola.tvpulse.ui.main.movies
 
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.width
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.composables.icons.lucide.Activity
-import com.composables.icons.lucide.Lucide
-import kotlinx.datetime.Clock
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
-
+import org.eltonkola.tvpulse.data.Consts
+import org.eltonkola.tvpulse.data.db.model.MediaEntity
+import org.eltonkola.tvpulse.ui.components.LoadingUi
+import org.eltonkola.tvpulse.ui.components.MediaCard
+import org.eltonkola.tvpulse.ui.components.TabScreen
 
 @Composable
 fun MoviesTab(
     navController: NavController,
+    viewModel: MoviesViewModel = viewModel { MoviesViewModel() }
 ) {
 
-    Text("MOVIES")
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+
+
+        val movies by viewModel.movies.collectAsState(emptyList())
+
+        TabScreen(
+            tabs = listOf(
+                Pair("WATCHLIST") {
+
+                        if (movies.isEmpty()) {
+                            Text("No movies in watchlist")
+                        } else {
+                            MoviePosterGrid(movies) {
+                                navController.navigate("movie/${it.id}")
+                            }
+                        }
+
+                },
+                Pair("UPCOMING") {
+                    if (movies.isEmpty()) {
+                        Text("No movies in upcoming")
+                    } else {
+                        MoviePosterGrid(movies) {
+                            navController.navigate("movie/${it.id}")
+                        }
+                    }
+                },
+                Pair("WATCHED") {
+                    if (movies.isEmpty()) {
+                        Text("No movies in watched")
+                    } else {
+                        MoviePosterGrid(movies) {
+                            navController.navigate("movie/${it.id}")
+                        }
+                    }
+                }
+            )
+        )
+    }
 
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MoviesAppBar(
-    navController: NavController
+fun MoviePosterGrid(
+    movies: List<MediaEntity>,
+    onPosterClick: (MediaEntity) -> Unit
 ) {
-    TopAppBar(
-        title = {
-            Row {
-                Icon(Lucide.Activity, null)
-                Spacer(modifier = Modifier.width(12.dp))
-                Text(text = "Movies")
-            }
-        },
-        actions = {
-//            IconButton( {
-//                navController.navigate(AppsScreen.Exercises.name)
-//            }){
-//                Icon(Lucide.BicepsFlexed, null)
-//            }
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(3),
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        items(movies) { movie ->
+            MediaCard(
+                posterUrl = movie.posterPath ?: Consts.DEFAULT_THUMB_URL,
+                onClick = { onPosterClick(movie) }
+            )
         }
-    )
+    }
 }
+
+

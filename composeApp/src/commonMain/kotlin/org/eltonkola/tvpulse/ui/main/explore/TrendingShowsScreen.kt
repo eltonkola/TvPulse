@@ -8,12 +8,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.Tv
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.toLocalDate
 import org.eltonkola.tvpulse.DiGraph
+import org.eltonkola.tvpulse.data.Consts
 import org.eltonkola.tvpulse.data.remote.model.TmdbListResponse
+import org.eltonkola.tvpulse.data.remote.model.TrendingTvShowDetails
 import org.eltonkola.tvpulse.data.remote.model.TvShowDetails
 import org.eltonkola.tvpulse.data.remote.service.TmdbApiClient
 import org.eltonkola.tvpulse.ui.components.ExploreCard
@@ -21,8 +24,12 @@ import org.eltonkola.tvpulse.ui.components.LoadingUi
 
 
 @Composable
-fun TrendingShowsScreen(apiClient: TmdbApiClient = DiGraph.tmdbApiClient) {
-    var tvShow by remember { mutableStateOf<TmdbListResponse<TvShowDetails>?>(null) }
+fun TrendingShowsScreen(
+    navController: NavController,
+    apiClient: TmdbApiClient = DiGraph.tmdbApiClient
+) {
+
+    var tvShow by remember { mutableStateOf<TmdbListResponse<TrendingTvShowDetails>?>(null) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
     LaunchedEffect(Unit) {
@@ -50,7 +57,7 @@ fun TrendingShowsScreen(apiClient: TmdbApiClient = DiGraph.tmdbApiClient) {
                     subtitle = "${formatDateToHumanReadable(tvShow.first_air_date)} · " +
                             "⭐ ${tvShow.vote_average}/10 (${tvShow.vote_count} votes)",
                     added = false,
-                    backgroundUrl = "https://image.tmdb.org/t/p/w500${tvShow.backdrop_path}"
+                    backgroundUrl = tvShow.backdrop_path ?: Consts.DEFAULT_THUMB_URL
                 )
 
             }

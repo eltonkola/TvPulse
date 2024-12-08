@@ -5,6 +5,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import org.eltonkola.tvpulse.data.db.DbManager
 import org.eltonkola.tvpulse.data.local.AppSettings
+import org.eltonkola.tvpulse.data.local.MediaRepository
 import org.eltonkola.tvpulse.data.remote.service.TmdbApiClient
 
 object DiGraph {
@@ -13,22 +14,14 @@ object DiGraph {
     private var coroutineScope = CoroutineScope(appDispatcher)
 
     private val settings: Settings = Settings()
-    private val dbManager: DbManager = DbManager()
+    val dbManager: DbManager = DbManager()
     val appSettings = AppSettings(settings)
 
     val tmdbApiClient: TmdbApiClient = TmdbApiClient()
 
-//
-//    val exerciseLoader = ExerciseLoader(coroutineScope)
-//
-//    val accountRepository: AccountRepository by lazy {
-//        AccountRepository(
-//            dbManager = dbManager,
-//            appSettings = appSettings,
-//            exerciseLoader = exerciseLoader
-//        )
-//    }
-
+    val mediaRepository: MediaRepository by lazy {
+        MediaRepository(dbManager, tmdbApiClient)
+    }
 
 //    val contactsRepository: ContactsRepository by lazy {
 //        ContactsRepository(coroutineScope = coroutineScope, dbManager = dbManager)

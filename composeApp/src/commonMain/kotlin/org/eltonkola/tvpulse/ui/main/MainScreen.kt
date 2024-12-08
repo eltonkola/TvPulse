@@ -13,19 +13,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.composables.icons.lucide.*
-import org.eltonkola.tvpulse.ui.main.explore.ExploreAppBar
 import org.eltonkola.tvpulse.ui.main.explore.ExploreTab
-import org.eltonkola.tvpulse.ui.main.movies.MoviesAppBar
 import org.eltonkola.tvpulse.ui.main.movies.MoviesTab
-import org.eltonkola.tvpulse.ui.main.settings.SettingsAppBar
 import org.eltonkola.tvpulse.ui.main.settings.SettingsTab
-import org.eltonkola.tvpulse.ui.main.tvShows.TvShowsAppBar
 import org.eltonkola.tvpulse.ui.main.tvShows.TvShowsTab
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
@@ -42,7 +37,7 @@ data class AppTab(
 
 @Composable
 fun MainScreen(navController: NavController,
-               viewModel: MainScreenViewModel = viewModel { MainScreenViewModel() },
+    viewModel: MainScreenViewModel = viewModel { MainScreenViewModel() },
 ) {
 
 //    val uiState by viewModel.uiState.collectAsState()
@@ -58,14 +53,6 @@ fun MainScreen(navController: NavController,
 
     val borderColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.2f)
     Scaffold (
-        topBar = {
-            when (selectedItem) {
-                0 -> TvShowsAppBar (navController)
-                1 -> MoviesAppBar(navController)
-                2 -> ExploreAppBar(navController)
-                3 -> SettingsAppBar(navController)
-            }
-        },
         bottomBar = {
             NavigationBar(
                 containerColor = MaterialTheme.colorScheme.surface,
