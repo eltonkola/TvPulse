@@ -18,7 +18,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import org.eltonkola.tvpulse.data.Consts
 import org.eltonkola.tvpulse.data.db.model.MediaEntity
-import org.eltonkola.tvpulse.ui.components.LoadingUi
 import org.eltonkola.tvpulse.ui.components.MediaCard
 import org.eltonkola.tvpulse.ui.components.TabScreen
 
@@ -32,7 +31,6 @@ fun MoviesTab(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-
 
         val movies by viewModel.movies.collectAsState(emptyList())
 
@@ -52,15 +50,6 @@ fun MoviesTab(
                 Pair("UPCOMING") {
                     if (movies.isEmpty()) {
                         Text("No movies in upcoming")
-                    } else {
-                        MoviePosterGrid(movies) {
-                            navController.navigate("movie/${it.id}")
-                        }
-                    }
-                },
-                Pair("WATCHED") {
-                    if (movies.isEmpty()) {
-                        Text("No movies in watched")
                     } else {
                         MoviePosterGrid(movies) {
                             navController.navigate("movie/${it.id}")

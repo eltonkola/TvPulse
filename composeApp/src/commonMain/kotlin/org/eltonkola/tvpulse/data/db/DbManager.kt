@@ -64,6 +64,11 @@ class DbManager {
             .map { it.list } // Extract the list from the query result
     }
 
+    fun getTvShowsFlow(): Flow<List<MediaEntity>> {
+        return realm.query<MediaEntity>("type == $0", MediaType.TV_SHOW.mediaType).asFlow() // Observe changes
+            .map { it.list } // Extract the list from the query result
+    }
+
     suspend fun getAllMovies(): List<MediaEntity> {
         return realm.query<MediaEntity>("type == $0", MediaType.MOVIE.mediaType)
             .find()

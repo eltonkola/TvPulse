@@ -40,9 +40,8 @@ class MediaRepository (
     }
 
     suspend fun addTvShowToWatchlist(id: Int){
+
         val tvShow = tmdbApiClient.getTvShowDetails(id)
-
-
 
         dbManager.writeTransaction {
             val genres = tvShow.genres.map { genre ->
@@ -62,8 +61,8 @@ class MediaRepository (
                 this.voteAverage = tvShow.vote_average
                 this.voteCount = tvShow.vote_count
                 this.popularity = tvShow.popularity
-                this.numberOfSeasons = tvShow.numberOfSeasons
-                this.numberOfEpisodes = tvShow.numberOfEpisodes
+                this.numberOfSeasons = tvShow.number_of_seasons
+                this.numberOfEpisodes = tvShow.number_of_episodes
             })
         }
 

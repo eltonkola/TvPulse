@@ -95,6 +95,19 @@ data class TvShowDetails(
     val original_language: String,
     val origin_country: List<String>,
     val adult: Boolean,
-    val numberOfSeasons: Int,
-    val numberOfEpisodes: Int
+    val number_of_episodes: Int,
+    val number_of_seasons: Int,
+    val seasons: List<Seasons>
+)
+
+@Serializable
+data class Seasons(
+    val air_date: String,
+    val episode_count: Int,
+    val id: Int,
+    val name: String,
+    val overview: String?,
+    val poster_path: String?,
+    val season_number: Int,
+    val vote_average: Double,
 )
