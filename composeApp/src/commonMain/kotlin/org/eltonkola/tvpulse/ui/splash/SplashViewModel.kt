@@ -1,4 +1,4 @@
-package org.eltonkola.tvpulse.ui
+package org.eltonkola.tvpulse.ui.splash
 
 
 

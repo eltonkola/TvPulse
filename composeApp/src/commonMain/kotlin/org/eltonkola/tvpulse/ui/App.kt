@@ -19,6 +19,7 @@ import org.eltonkola.tvpulse.DiGraph
 import org.eltonkola.tvpulse.data.local.AppSettings
 import org.eltonkola.tvpulse.data.local.model.AppsScreen
 import org.eltonkola.tvpulse.ui.main.MainScreen
+import org.eltonkola.tvpulse.ui.movie.MovieScreen
 import org.eltonkola.tvpulse.ui.settings.SettingsScreen
 import org.eltonkola.tvpulse.ui.splash.SplashScreen
 import org.eltonkola.tvpulse.ui.theme.TvPulseTheme
@@ -79,10 +80,10 @@ fun App(
 //                    )
                 }
                 composable(route = "${AppsScreen.Movie.name}/{id}") { backStackEntry ->
-//                    SingleExercise(
-//                        navController = navController,
-//                        backStackEntry.arguments!!.getString("id")!!
-//                    )
+                    MovieScreen(
+                        backStackEntry.arguments!!.getString("id")!!.toInt(),
+                        navController = navController,
+                    )
                 }
 
 //                dialog(route = AppsScreen.TrackMoodDialog.name) {

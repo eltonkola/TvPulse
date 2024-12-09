@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -16,15 +17,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.composables.icons.lucide.Film
+import com.composables.icons.lucide.Lucide
+import com.composables.icons.lucide.Tv
 import org.eltonkola.tvpulse.data.Consts
 import org.eltonkola.tvpulse.data.db.model.MediaEntity
 import org.eltonkola.tvpulse.data.local.model.AppsScreen
+import org.eltonkola.tvpulse.ui.components.ErrorUi
 import org.eltonkola.tvpulse.ui.components.MediaCard
 import org.eltonkola.tvpulse.ui.components.TabScreen
 
 @Composable
 fun MoviesTab(
     navController: NavController,
+    openTab:(Int) -> Unit,
     viewModel: MoviesViewModel = viewModel { MoviesViewModel() }
 ) {
 
@@ -38,19 +44,34 @@ fun MoviesTab(
         TabScreen(
             tabs = listOf(
                 Pair("WATCHLIST") {
+                    if (movies.isEmpty()) {
+                        ErrorUi(
+                            message = "No movies in watchlist",
+                            retry = true,
+                            retryLabel = "Explore movies",
+                            onRetry = { openTab(2) },
+                            icon = Lucide.Film,
+                            iconColor = MaterialTheme.colorScheme.primary,
+                        )
 
-                        if (movies.isEmpty()) {
-                            Text("No movies in watchlist")
-                        } else {
-                            MoviePosterGrid(movies) {
-                                navController.navigate("${AppsScreen.Movie.name}/${it.id}")
-                            }
+                    } else {
+                        MoviePosterGrid(movies) {
+                            navController.navigate("${AppsScreen.Movie.name}/${it.id}")
                         }
+                    }
 
                 },
                 Pair("UPCOMING") {
                     if (movies.isEmpty()) {
-                        Text("No movies in upcoming")
+                        ErrorUi(
+                            message = "No upcoming movies on your list",
+                            retry = true,
+                            retryLabel = "Explore movies",
+                            onRetry = { openTab(2) },
+                            icon = Lucide.Film,
+                            iconColor = MaterialTheme.colorScheme.primary,
+                        )
+
                     } else {
                         MoviePosterGrid(movies) {
                             navController.navigate("${AppsScreen.Movie.name}/${it.id}")

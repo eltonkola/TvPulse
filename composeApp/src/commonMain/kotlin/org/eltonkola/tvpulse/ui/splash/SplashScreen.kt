@@ -6,8 +6,6 @@ import androidx.compose.runtime.getValue
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import org.eltonkola.tvpulse.data.local.model.AppsScreen
-import org.eltonkola.tvpulse.ui.SplashOpState
-import org.eltonkola.tvpulse.ui.SplashViewModel
 import org.eltonkola.tvpulse.ui.components.LoadingUi
 
 @Composable

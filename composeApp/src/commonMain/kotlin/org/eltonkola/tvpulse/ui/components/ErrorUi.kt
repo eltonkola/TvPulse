@@ -8,6 +8,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.TriangleAlert
@@ -17,6 +19,8 @@ fun ErrorUi(
     message : String,
     retry: Boolean = false,
     retryLabel: String = "Retry",
+    icon: ImageVector = Lucide.TriangleAlert,
+    iconColor: Color = MaterialTheme.colorScheme.error,
     onRetry: () -> Unit = {},
 ) {
     Box(
@@ -29,9 +33,10 @@ fun ErrorUi(
         ) {
 
             Icon(
-                imageVector = Lucide.TriangleAlert,
+                imageVector = icon,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.error
+                tint = iconColor,
+                modifier = Modifier.size(64.dp)
             )
             Spacer(modifier = Modifier.size(8.dp))
             Text(message)

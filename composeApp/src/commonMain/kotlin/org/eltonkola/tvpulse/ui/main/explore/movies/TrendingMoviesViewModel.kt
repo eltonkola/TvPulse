@@ -1,4 +1,4 @@
-package org.eltonkola.tvpulse.ui.main.explore
+package org.eltonkola.tvpulse.ui.main.explore.movies
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

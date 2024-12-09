@@ -92,8 +92,8 @@ fun MainScreen(navController: NavController,
             verticalArrangement = Arrangement.Center
         ) {
             when (selectedItem) {
-                0 -> TvShowsTab (navController)
-                1 -> MoviesTab(navController)
+                0 -> TvShowsTab (navController, { selectedItem = it })
+                1 -> MoviesTab(navController, { selectedItem = it })
                 2 -> ExploreTab(navController)
                 3 -> ProfileTab(navController)
             }

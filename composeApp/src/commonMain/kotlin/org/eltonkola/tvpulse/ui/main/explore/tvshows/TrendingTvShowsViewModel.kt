@@ -1,4 +1,4 @@
-package org.eltonkola.tvpulse.ui.main.explore
+package org.eltonkola.tvpulse.ui.main.explore.tvshows
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -63,7 +63,7 @@ class TrendingTvShowsViewModel(
                 mediaRepository.addTvShowToWatchlist(id)
                 _addState.update { AddTvShowState.Done }
             }catch (e: Exception){
-                _addState.update {  AddTvShowState.Error(e.message ?: "Error adding movie") }
+                _addState.update { AddTvShowState.Error(e.message ?: "Error adding movie") }
                 e.printStackTrace()
             }
         }

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -16,9 +17,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.composables.icons.lucide.*
 import org.eltonkola.tvpulse.data.Consts
 import org.eltonkola.tvpulse.data.db.model.MediaEntity
 import org.eltonkola.tvpulse.data.local.model.AppsScreen
+import org.eltonkola.tvpulse.ui.components.ErrorUi
 import org.eltonkola.tvpulse.ui.components.MediaCard
 import org.eltonkola.tvpulse.ui.components.TabScreen
 
@@ -26,7 +29,8 @@ import org.eltonkola.tvpulse.ui.components.TabScreen
 @Composable
 fun TvShowsTab(
     navController: NavController,
-    viewModel: TvShowsViewModel = viewModel { TvShowsViewModel() }
+    openTab:(Int) -> Unit,
+    viewModel: TvShowsViewModel = viewModel { TvShowsViewModel() },
 ) {
 
     Box(
@@ -41,7 +45,14 @@ fun TvShowsTab(
                 Pair("WATCHLIST") {
 
                     if (movies.isEmpty()) {
-                        Text("No shows in watchlist")
+                        ErrorUi(
+                            message = "No shows in watchlist",
+                            retry = true,
+                            retryLabel = "Explore tv shows",
+                            onRetry = { openTab(2) },
+                            icon = Lucide.Tv,
+                            iconColor = MaterialTheme.colorScheme.primary,
+                        )
                     } else {
                         TvShowsPosterGrid(movies) {
                             navController.navigate("${AppsScreen.TvShow.name}/${it.id}")
@@ -51,7 +62,14 @@ fun TvShowsTab(
                 },
                 Pair("UPCOMING") {
                     if (movies.isEmpty()) {
-                        Text("No upcoming tv shows")
+                        ErrorUi(
+                            message = "No upcoming shows",
+                            retry = true,
+                            retryLabel = "Explore tv shows",
+                            onRetry = { openTab(2) },
+                            icon = Lucide.Calendar,
+                            iconColor = MaterialTheme.colorScheme.primary,
+                        )
                     } else {
                         TvShowsPosterGrid(movies) {
                             navController.navigate("${AppsScreen.TvShow.name}/${it.id}")

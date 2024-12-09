@@ -103,4 +103,21 @@ class DbManager {
     fun close() {
         realm.close()
     }
+
+    fun getMovieById(id: Int): Flow<MediaEntity?> {
+        return realm.query<MediaEntity>("id == $0 AND type == $1", id, MediaType.MOVIE.mediaType)
+            .asFlow()
+            .map { results ->
+                results.list.firstOrNull()
+            }
+    }
+
+    fun getTvShowById(id: Int): Flow<MediaEntity?> {
+        return realm.query<MediaEntity>("id == $0 AND type == $1", id, MediaType.TV_SHOW.mediaType)
+            .asFlow()
+            .map { results ->
+                results.list.firstOrNull()
+            }
+    }
+
 }

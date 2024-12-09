@@ -1,6 +1,7 @@
 package org.eltonkola.tvpulse.data.local
 
 import io.realm.kotlin.ext.toRealmList
+import kotlinx.coroutines.flow.Flow
 import org.eltonkola.tvpulse.data.db.DbManager
 import org.eltonkola.tvpulse.data.db.model.GenreEntity
 import org.eltonkola.tvpulse.data.db.model.MediaEntity
@@ -69,5 +70,12 @@ class MediaRepository (
 
     }
 
+    fun getMovieById(id: Int): Flow<MediaEntity?> {
+        return dbManager.getMovieById(id)
+    }
+
+    fun getTvShowById(id: Int): Flow<MediaEntity?> {
+        return dbManager.getTvShowById(id)
+    }
 
 }

@@ -1,4 +1,4 @@
-package org.eltonkola.tvpulse.ui.main.explore
+package org.eltonkola.tvpulse.ui.main.explore.movies
 
 
 import androidx.compose.foundation.layout.Arrangement
@@ -9,18 +9,21 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.paging.LoadState
 import app.cash.paging.compose.collectAsLazyPagingItems
 import com.composables.icons.lucide.Film
 import com.composables.icons.lucide.Lucide
 import com.dokar.sonner.Toaster
 import com.dokar.sonner.rememberToasterState
 import org.eltonkola.tvpulse.data.Consts
+import org.eltonkola.tvpulse.ui.components.ErrorUi
 import org.eltonkola.tvpulse.ui.components.ExploreCard
+import org.eltonkola.tvpulse.ui.components.LoadingUi
+import org.eltonkola.tvpulse.ui.main.explore.tvshows.formatDateToHumanReadable
 
 
 @Composable
@@ -33,6 +36,20 @@ fun TrendingMoviesScreen(
     val addState = viewModel.addState.collectAsState()
     val toaster = rememberToasterState()
 
+
+    when(movies.loadState.append){
+        LoadState.Loading -> {
+            LoadingUi()
+        }
+        is LoadState.Error -> {
+            ErrorUi(
+                message = "Error loading trending Movies!",
+                retry = true,
+                onRetry = { movies.retry() }
+            )
+        }
+        else -> {}
+    }
                 LazyColumn(
                     modifier = Modifier.fillMaxWidth(),
                     verticalArrangement = Arrangement.spacedBy(8.dp)

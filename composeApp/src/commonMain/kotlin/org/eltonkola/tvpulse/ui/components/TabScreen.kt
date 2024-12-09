@@ -26,6 +26,7 @@ fun TabScreen(
         ) {
             tabs.forEachIndexed { index, tab ->
                 Tab(
+                    modifier = Modifier.fillMaxSize(),
                     selected = selectedTabIndex == index,
                     onClick = { selectedTabIndex = index },
                     text = { Text(tab.first) } // Tab name
