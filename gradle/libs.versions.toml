@@ -30,6 +30,7 @@ lifecycleViewmodelCompose = "2.8.0"
 iconsLucide = "1.0.0"
 coilComposeCore = "3.0.4"
 coilComposeCoreNetwork = "3.0.0-alpha08"
+uiToolingPreview = "1.7.1"
 
 [libraries]
 flagkit = { module = "dev.carlsen.flagkit:flagkit", version.ref = "flagkit" }
@@ -75,6 +76,7 @@ coil-network-ktor = { module = "io.coil-kt.coil3:coil-network-ktor", version.ref
 
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktorClientCore" }
 ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktorClientCore" }
+ui-tooling-preview = { module = "org.jetbrains.compose.ui:ui-tooling-preview", version.ref = "uiToolingPreview" }
 
 
 [plugins]

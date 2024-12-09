@@ -44,7 +44,7 @@ fun TvShowsTab(
                         Text("No shows in watchlist")
                     } else {
                         TvShowsPosterGrid(movies) {
-                            navController.navigate("${AppsScreen.TvShow.title}/${it.id}")
+                            navController.navigate("${AppsScreen.TvShow.name}/${it.id}")
                         }
                     }
 
@@ -54,7 +54,7 @@ fun TvShowsTab(
                         Text("No upcoming tv shows")
                     } else {
                         TvShowsPosterGrid(movies) {
-                            navController.navigate("${AppsScreen.TvShow.title}/${it.id}")
+                            navController.navigate("${AppsScreen.TvShow.name}/${it.id}")
                         }
                     }
                 }

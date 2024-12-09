@@ -58,7 +58,7 @@ fun TrendingShowsScreen(
                            if (addState.value is AddTvShowState.Idle) {
                                viewModel.addTvShowToWatchlist(tvShows[it]!!.id)
                            } else {
-                               toaster.show("Already adding a movie..")
+                               toaster.show("Already adding a show..")
                            }
                        }
                    )

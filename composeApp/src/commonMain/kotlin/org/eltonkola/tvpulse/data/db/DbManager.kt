@@ -69,6 +69,16 @@ class DbManager {
             .map { it.list } // Extract the list from the query result
     }
 
+    fun getFavoriteMoviesFlow(): Flow<List<MediaEntity>> {
+        return realm.query<MediaEntity>("type == $0 and isFavorite == true", MediaType.MOVIE.mediaType).asFlow() // Observe changes
+            .map { it.list } // Extract the list from the query result
+    }
+
+    fun getFavoriteTvShowsFlow(): Flow<List<MediaEntity>> {
+        return realm.query<MediaEntity>("type == $0 and isFavorite == true", MediaType.TV_SHOW.mediaType).asFlow() // Observe changes
+            .map { it.list } // Extract the list from the query result
+    }
+
     suspend fun getAllMovies(): List<MediaEntity> {
         return realm.query<MediaEntity>("type == $0", MediaType.MOVIE.mediaType)
             .find()

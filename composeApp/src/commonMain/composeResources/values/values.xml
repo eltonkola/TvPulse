@@ -32,6 +32,6 @@ That’s it. Have fun tracking your TV life!
     <string name="level_tab_1">Tv Shows</string>
     <string name="level_tab_2">Movies</string>
     <string name="level_tab_3">Discover</string>
-    <string name="level_tab_4">Settings</string>
+    <string name="level_tab_4">Profile</string>
 
 </resources>

@@ -49,6 +49,8 @@ class MediaEntity : RealmObject {
     // For Movies
     var runtime: Int? = null // movie length in minutes
 
+    var isFavorite: Boolean = false
+
 
     var mediaType: MediaType
         get() = MediaType.entries.first { it.mediaType == type }

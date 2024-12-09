@@ -19,6 +19,7 @@ import org.eltonkola.tvpulse.DiGraph
 import org.eltonkola.tvpulse.data.local.AppSettings
 import org.eltonkola.tvpulse.data.local.model.AppsScreen
 import org.eltonkola.tvpulse.ui.main.MainScreen
+import org.eltonkola.tvpulse.ui.settings.SettingsScreen
 import org.eltonkola.tvpulse.ui.splash.SplashScreen
 import org.eltonkola.tvpulse.ui.theme.TvPulseTheme
 import org.eltonkola.tvpulse.ui.tutorial.TutorialScreen
@@ -67,6 +68,9 @@ fun App(
                 }
                 composable(route = AppsScreen.Main.name) {
                     MainScreen(navController = navController)
+                }
+                composable(route = AppsScreen.Settings.name) {
+                    SettingsScreen(navController = navController)
                 }
                 composable(route = "${AppsScreen.TvShow.name}/{id}") { backStackEntry ->
 //                    SingleExercise(

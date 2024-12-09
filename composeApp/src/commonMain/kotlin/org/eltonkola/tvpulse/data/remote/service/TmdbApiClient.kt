@@ -63,8 +63,8 @@ class TmdbApiClient {
         return fetchFromApi(endpoint)
     }
 
-    suspend fun getTrendingMovies(): TmdbListResponse<TrendingMovieDetails> {
-        val endpoint = "$baseUrl/trending/movie/day?language=en-US"
+    suspend fun getTrendingMovies(page: Int, pageSize: Int): TmdbListResponse<TrendingMovieDetails> {
+        val endpoint = "$baseUrl/trending/movie/day?language=en-US&page=$page"//&pageSize=$pageSize
         return fetchFromApi(endpoint)
     }
 

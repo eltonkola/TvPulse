@@ -88,6 +88,8 @@ kotlin {
             dependencies {
                 implementation(libs.ktor.client.okhttp)
                 implementation(libs.ktor.client.android)
+
+
             }
         }
         iosMain.dependencies {
@@ -126,5 +128,6 @@ android {
 
 dependencies {
     debugImplementation(compose.uiTooling)
+    implementation(libs.ui.tooling.preview)
 }
 

@@ -18,6 +18,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import org.eltonkola.tvpulse.data.Consts
 import org.eltonkola.tvpulse.data.db.model.MediaEntity
+import org.eltonkola.tvpulse.data.local.model.AppsScreen
 import org.eltonkola.tvpulse.ui.components.MediaCard
 import org.eltonkola.tvpulse.ui.components.TabScreen
 
@@ -42,7 +43,7 @@ fun MoviesTab(
                             Text("No movies in watchlist")
                         } else {
                             MoviePosterGrid(movies) {
-                                navController.navigate("movie/${it.id}")
+                                navController.navigate("${AppsScreen.Movie.name}/${it.id}")
                             }
                         }
 
@@ -52,7 +53,7 @@ fun MoviesTab(
                         Text("No movies in upcoming")
                     } else {
                         MoviePosterGrid(movies) {
-                            navController.navigate("movie/${it.id}")
+                            navController.navigate("${AppsScreen.Movie.name}/${it.id}")
                         }
                     }
                 }
