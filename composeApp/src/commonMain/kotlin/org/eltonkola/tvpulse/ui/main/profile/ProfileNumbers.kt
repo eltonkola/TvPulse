@@ -1,6 +1,5 @@
 package org.eltonkola.tvpulse.ui.main.profile
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -10,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-
+import org.eltonkola.tvpulse.ui.components.DividerLine
 
 @Composable
 fun ProfileNumbers(
@@ -21,9 +20,7 @@ fun ProfileNumbers(
     Column(
         modifier = Modifier.fillMaxWidth().height(68.dp),
     ) {
-        Spacer(
-            modifier = Modifier.fillMaxWidth().height(1.dp).background(MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f))
-        )
+        DividerLine()
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -48,9 +45,8 @@ fun ProfileNumbers(
                     style = MaterialTheme.typography.bodyMedium,
                 )
             }
-            Spacer(
-                modifier = Modifier.width(1.dp).height(66.dp).background(MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f))
-            )
+            DividerLine(height = 66.dp)
+
             Column(
                 modifier = Modifier.weight(1f).height(66.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -71,9 +67,8 @@ fun ProfileNumbers(
                     style = MaterialTheme.typography.bodyMedium,
                 )
             }
-            Spacer(
-                modifier = Modifier.width(1.dp).height(66.dp).background(MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f))
-            )
+
+            DividerLine(height = 66.dp)
             Column(
                 modifier = Modifier.weight(1f).height(66.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -98,9 +93,7 @@ fun ProfileNumbers(
         }
 
 
-        Spacer(
-            modifier = Modifier.fillMaxWidth().height(1.dp).background(MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f))
-        )
+        DividerLine()
 
     }
 }

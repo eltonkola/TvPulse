@@ -1,5 +1,6 @@
 package org.eltonkola.tvpulse.data.remote.model
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 
@@ -28,7 +29,7 @@ data class TrendingMovieDetails(
     val video: Boolean,
     val genre_ids: List<Int>,
     val original_language: String,
-    val media_type: String,
+    val media_type: String?=null,
     val saved: Boolean = false
 )
 
@@ -75,7 +76,16 @@ data class MovieDetails(
     val video: Boolean,
     val genres: List<GenreDetails>,
     val original_language: String,
-    val runtime: Int
+    val runtime: Int,
+
+
+    val homepage: String? = null,
+    val budget: Long = 0,
+    val revenue : Long = 0,
+    val status : String = "",
+    val tagline : String = "",
+    val belongsToCollection : String ?= null,
+
 )
 
 @Serializable
@@ -110,4 +120,50 @@ data class Seasons(
     val poster_path: String?,
     val season_number: Int,
     val vote_average: Double,
+)
+
+
+@Serializable
+data class MovieVideosResponse(
+    val id: Int,
+    val results: List<VideoResult>
+)
+
+@Serializable
+data class VideoResult(
+    @SerialName("iso_639_1") val language: String,
+    @SerialName("iso_3166_1") val region: String,
+    val name: String,
+    val key: String, // YouTube video key
+    val site: String,
+    val size: Int,
+    val type: String,
+    val official: Boolean,
+    @SerialName("published_at") val publishedAt: String,
+    val id: String
+)
+
+
+@Serializable
+data class MovieCreditsResponse(
+    val id: Int,
+    val cast: List<CastMember>,
+    val crew: List<CrewMember>
+)
+
+@Serializable
+data class CastMember(
+    val id: Int,
+    val name: String,
+    val character: String,
+    @SerialName("profile_path") val profilePath: String?
+)
+
+@Serializable
+data class CrewMember(
+    val id: Int,
+    val name: String,
+    val department: String,
+    val job: String,
+    @SerialName("profile_path") val profilePath: String?
 )

@@ -59,7 +59,7 @@ fun TrendingShowsScreen(
                        icon = Lucide.Tv,
                        title = tvShows[it]!!.name,
                        country = tvShows[it]!!.origin_country.first(),
-                       subtitle = "${formatDateToHumanReadable(tvShows[it]!!.first_air_date)} · " +
+                       subtitle = "${tvShows[it]!!.first_air_date.formatDateToHumanReadable()} · " +
                                "⭐ ${tvShows[it]!!.vote_average}/10 (${tvShows[it]!!.vote_count} votes)",
                        added = tvShows[it]!!.saved,
                        backgroundUrl = tvShows[it]!!.backdrop_path ?: Consts.DEFAULT_THUMB_URL,
@@ -111,10 +111,10 @@ fun TrendingShowsScreen(
 }
 
 
-fun formatDateToHumanReadable(dateString: String): String {
+fun String.formatDateToHumanReadable(): String {
     return try {
         // Parse the input date string
-        val date: LocalDate = dateString.toLocalDate()
+        val date: LocalDate = this.toLocalDate()
 
         // Format the date into a human-readable string
         val month = date.month.name.lowercase().replaceFirstChar { it.uppercase() }
@@ -123,7 +123,6 @@ fun formatDateToHumanReadable(dateString: String): String {
 
         "$month $day $year"
     } catch (e: Exception) {
-        dateString // Handle invalid input
+        this // Handle invalid input
     }
 }
-

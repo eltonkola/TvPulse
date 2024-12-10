@@ -5,6 +5,7 @@ import androidx.compose.material3.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import org.eltonkola.tvpulse.expect.UpdateEdgeToEdge
 
 private val LightColors = lightColorScheme(
     primary = Color(0xFFFFC107), // TV Time's yellow for primary buttons
@@ -33,6 +34,9 @@ fun TvPulseTheme(
     content: @Composable () -> Unit
 ) {
     val colors = if (darkTheme) DarkColors else LightColors
+
+    UpdateEdgeToEdge(darkTheme)
+
     MaterialTheme(
         colorScheme = colors,
         typography = Typography,

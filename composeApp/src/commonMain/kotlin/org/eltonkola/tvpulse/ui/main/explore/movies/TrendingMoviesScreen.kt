@@ -61,7 +61,7 @@ fun TrendingMoviesScreen(
                                 icon = Lucide.Film,
                                 title = movies[it]!!.title,
                                 country = movies[it]!!.original_language,
-                                subtitle = "${formatDateToHumanReadable(movies[it]!!.release_date)} · " +
+                                subtitle = "${movies[it]!!.release_date.formatDateToHumanReadable()} · " +
                                         "⭐ ${movies[it]!!.vote_average}/10 (${movies[it]!!.vote_count} votes)",
                                 added = movies[it]!!.saved,
                                 backgroundUrl = movies[it]!!.backdrop_path ?: Consts.DEFAULT_THUMB_URL,

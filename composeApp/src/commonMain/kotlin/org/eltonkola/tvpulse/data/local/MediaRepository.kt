@@ -6,6 +6,13 @@ import org.eltonkola.tvpulse.data.db.DbManager
 import org.eltonkola.tvpulse.data.db.model.GenreEntity
 import org.eltonkola.tvpulse.data.db.model.MediaEntity
 import org.eltonkola.tvpulse.data.db.model.MediaType
+import org.eltonkola.tvpulse.data.db.model.WatchStatus
+import org.eltonkola.tvpulse.data.remote.model.MovieCreditsResponse
+import org.eltonkola.tvpulse.data.remote.model.MovieDetails
+import org.eltonkola.tvpulse.data.remote.model.MovieVideosResponse
+import org.eltonkola.tvpulse.data.remote.model.TmdbListResponse
+import org.eltonkola.tvpulse.data.remote.model.TrendingMovieDetails
+import org.eltonkola.tvpulse.data.remote.model.TvShowDetails
 import org.eltonkola.tvpulse.data.remote.service.TmdbApiClient
 
 class MediaRepository (
@@ -76,6 +83,29 @@ class MediaRepository (
 
     fun getTvShowById(id: Int): Flow<MediaEntity?> {
         return dbManager.getTvShowById(id)
+    }
+
+    suspend fun getFullMovieById(id: Int): MovieDetails {
+        return tmdbApiClient.getMovieDetails(id)
+    }
+
+    suspend fun getMovieTrailers(id: Int): MovieVideosResponse {
+        return tmdbApiClient.getMovieTrailers(id)
+    }
+
+    suspend fun getMovieCredits(id: Int): MovieCreditsResponse {
+        return tmdbApiClient.getMovieCredits(id)
+    }
+
+    suspend fun getSimilarMovies(id: Int): TmdbListResponse<TrendingMovieDetails> {
+        return tmdbApiClient.getSimilarMovies(id)
+    }
+    suspend fun getFullTvShowById(id: Int): TvShowDetails {
+        return tmdbApiClient.getTvShowDetails(id)
+    }
+
+    suspend fun setMovieWatched(status: WatchStatus, id: Int) : Boolean {
+        return dbManager.setMovieWatched(status, id)
     }
 
 }

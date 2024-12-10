@@ -22,6 +22,7 @@ import org.eltonkola.tvpulse.data.Consts
 import org.eltonkola.tvpulse.data.db.model.MediaEntity
 import org.eltonkola.tvpulse.data.local.model.AppsScreen
 import org.eltonkola.tvpulse.ui.components.ErrorUi
+import org.eltonkola.tvpulse.ui.components.LoadingUi
 import org.eltonkola.tvpulse.ui.components.MediaCard
 import org.eltonkola.tvpulse.ui.components.TabScreen
 
@@ -38,46 +39,64 @@ fun TvShowsTab(
         contentAlignment = Alignment.Center
     ) {
 
-        val movies by viewModel.tvShows.collectAsState(emptyList())
+        val uiState by viewModel.uiState.collectAsState()
 
-        TabScreen(
-            tabs = listOf(
-                Pair("WATCHLIST") {
+        when (uiState) {
+            is TvShowsUiState.Loading -> LoadingUi()
+            is TvShowsUiState.Ready -> {
+                val tvShows = (uiState as TvShowsUiState.Ready).tvShows
 
-                    if (movies.isEmpty()) {
-                        ErrorUi(
-                            message = "No shows in watchlist",
-                            retry = true,
-                            retryLabel = "Explore tv shows",
-                            onRetry = { openTab(2) },
-                            icon = Lucide.Tv,
-                            iconColor = MaterialTheme.colorScheme.primary,
-                        )
-                    } else {
-                        TvShowsPosterGrid(movies) {
-                            navController.navigate("${AppsScreen.TvShow.name}/${it.id}")
+                TabScreen(
+                    tabs = listOf(
+                        Pair("WATCHLIST") {
+
+                            if (tvShows.isEmpty()) {
+                                ErrorUi(
+                                    message = "No shows in watchlist",
+                                    retry = true,
+                                    retryLabel = "Explore tv shows",
+                                    onRetry = { openTab(2) },
+                                    icon = Lucide.Tv,
+                                    iconColor = MaterialTheme.colorScheme.primary,
+                                )
+                            } else {
+                                TvShowsPosterGrid(tvShows) {
+                                    navController.navigate("${AppsScreen.TvShow.name}/${it.id}")
+                                }
+                            }
+
+                        },
+                        Pair("UPCOMING") {
+                            if (tvShows.isEmpty()) {
+                                ErrorUi(
+                                    message = "No upcoming shows",
+                                    retry = true,
+                                    retryLabel = "Explore tv shows",
+                                    onRetry = { openTab(2) },
+                                    icon = Lucide.Calendar,
+                                    iconColor = MaterialTheme.colorScheme.primary,
+                                )
+                            } else {
+                                TvShowsPosterGrid(tvShows) {
+                                    navController.navigate("${AppsScreen.TvShow.name}/${it.id}")
+                                }
+                            }
                         }
-                    }
+                    )
+                )
 
-                },
-                Pair("UPCOMING") {
-                    if (movies.isEmpty()) {
-                        ErrorUi(
-                            message = "No upcoming shows",
-                            retry = true,
-                            retryLabel = "Explore tv shows",
-                            onRetry = { openTab(2) },
-                            icon = Lucide.Calendar,
-                            iconColor = MaterialTheme.colorScheme.primary,
-                        )
-                    } else {
-                        TvShowsPosterGrid(movies) {
-                            navController.navigate("${AppsScreen.TvShow.name}/${it.id}")
-                        }
-                    }
-                }
-            )
-        )
+            }
+            is TvShowsUiState.Error ->
+                ErrorUi(
+                    message = "Error loading tv shows",
+                    retry = true,
+                    onRetry = {
+                        viewModel.loadTvShows()
+                    },
+                    icon = Lucide.Tv
+                )
+        }
+
     }
 
 

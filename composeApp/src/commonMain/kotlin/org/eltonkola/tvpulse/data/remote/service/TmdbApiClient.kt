@@ -78,4 +78,19 @@ class TmdbApiClient {
         return fetchFromApi(endpoint)
     }
 
+    suspend fun getMovieTrailers(id: Int): MovieVideosResponse {
+        val endpoint = "$baseUrl/movie/$id/videos"
+        return fetchFromApi(endpoint)
+    }
+    suspend fun getMovieCredits(id: Int): MovieCreditsResponse {
+        val endpoint = "$baseUrl/movie/$id/credits"
+        return fetchFromApi(endpoint)
+    }
+
+    suspend fun getSimilarMovies(id: Int): TmdbListResponse<TrendingMovieDetails> {
+        val endpoint = "$baseUrl/movie/$id/similar"
+        return fetchFromApi(endpoint)
+    }
+
+
 }

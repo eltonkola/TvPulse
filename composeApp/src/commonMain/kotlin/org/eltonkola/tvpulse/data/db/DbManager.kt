@@ -5,12 +5,14 @@ import co.touchlab.kermit.Logger
 import io.realm.kotlin.MutableRealm
 import io.realm.kotlin.Realm
 import io.realm.kotlin.RealmConfiguration
+import io.realm.kotlin.exceptions.RealmException
 import io.realm.kotlin.ext.query
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.eltonkola.tvpulse.data.db.model.GenreEntity
 import org.eltonkola.tvpulse.data.db.model.MediaEntity
 import org.eltonkola.tvpulse.data.db.model.MediaType
+import org.eltonkola.tvpulse.data.db.model.WatchStatus
 
 
 class DbManager {
@@ -50,14 +52,6 @@ class DbManager {
                 title = genreName
             })
     }
-
-
-//    // Get all movies
-//    suspend fun getAllMovies(): List<MediaEntity> {
-//        return realm.query<MediaEntity>("type == $0", MediaType.MOVIE)
-//            .find()
-//            .toList()
-//    }
 
     fun getMoviesFlow(): Flow<List<MediaEntity>> {
         return realm.query<MediaEntity>("type == $0", MediaType.MOVIE.mediaType).asFlow() // Observe changes
@@ -118,6 +112,25 @@ class DbManager {
             .map { results ->
                 results.list.firstOrNull()
             }
+    }
+
+    suspend fun setMovieWatched(status: WatchStatus, id: Int) : Boolean {
+        return try {
+            realm.write {
+                // Query the entity by its ID
+                val mediaEntity = query<MediaEntity>("id == $0", id).first().find()
+                if (mediaEntity != null) {
+                    // Update the userWatchStatus field
+                    mediaEntity.userWatchStatus = status.status
+                } else {
+                    throw IllegalArgumentException("MediaEntity with id $id not found.")
+                }
+            }
+            true // Success
+        } catch (e: RealmException) {
+            e.printStackTrace()
+            false // Failure
+        }
     }
 
 }

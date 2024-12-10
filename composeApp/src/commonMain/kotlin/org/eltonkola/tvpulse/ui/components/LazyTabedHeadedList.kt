@@ -48,11 +48,13 @@ fun LazyTabedHeadedList(
     LazyHeadedList(
         minHeaderHeight = minHeaderHeight,
         header = {
-            Column {
+            Column(
+                modifier = Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.background)
+            ) {
                 header.invoke()
                 TabRow(
                     selectedTabIndex = selectedTabIndex,
-                    containerColor = MaterialTheme.colorScheme.surface
+                    containerColor = MaterialTheme.colorScheme.background
                 ) {
                     tabs.forEachIndexed { index, tab ->
                         Tab(

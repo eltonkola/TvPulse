@@ -71,8 +71,7 @@ fun LazyHeadedList(
                 .onGloballyPositioned { coordinates ->
                     maxHeaderHeightPx.value = coordinates.size.height
                 }
-                .offset { IntOffset(x = 0, y = toolbarOffsetHeightPx.value.roundToInt()) }
-                .background(Color.Red),
+                .offset { IntOffset(x = 0, y = toolbarOffsetHeightPx.value.roundToInt()) },
             contentAlignment = Alignment.BottomCenter,
             content = header
         )

@@ -88,27 +88,35 @@ fun MovieHeader(
                 modifier = Modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp, bottom = 8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-
-                Image(
-                    imageVector  = FlagKit.getFlag(movie.originalLanguage?: "us") ?: FlagKit.getFlag("us")!!,
-                    contentDescription = movie.originalLanguage?: "us",
-                    modifier = Modifier.size(16.dp)
-                )
-                Spacer(modifier = Modifier.size(4.dp))
-
-                Text(
-                    text = "${formatDateToHumanReadable(movie.releaseDate ?: "")} · " +
-                            "⭐ ${movie.voteAverage}/10 (${movie.voteCount} votes)",
+                  Text(
+                    text = "${movie.runtime?.formatRuntime() ?: "Unknown duration"} · " +
+                            movie.genres.map { it.title }.joinToString(),
                     modifier = Modifier.fillMaxWidth(),
                     style = MaterialTheme.typography.titleMedium
                 )
             }
-            Spacer(
-                modifier = Modifier.fillMaxWidth().height(1.dp).background(MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f))
-            )
+
         }
 
 
     }
 }
 
+fun Int.formatRuntime(): String {
+    if (this <= 0) return "0 minutes"
+
+    val hours = this / 60
+    val remainingMinutes = this % 60
+
+    return buildString {
+        if (hours > 0) {
+            append("$hours hour")
+            if (hours > 1) append("s") // Make "hour" plural if needed
+            if (remainingMinutes > 0) append(" ")
+        }
+        if (remainingMinutes > 0) {
+            append("$remainingMinutes minute")
+            if (remainingMinutes > 1) append("s") // Make "minute" plural if needed
+        }
+    }
+}

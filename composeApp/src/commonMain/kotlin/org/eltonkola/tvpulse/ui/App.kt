@@ -2,6 +2,8 @@ package org.eltonkola.tvpulse.ui
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.safeContentPadding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.*
@@ -60,7 +62,7 @@ fun App(
             NavHost(
                 navController = navController,
                 startDestination = AppsScreen.Splash.name,
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize().systemBarsPadding() //TODO do we want it here, or on every screen
             ) {
                 composable(route = AppsScreen.Splash.name) {
                     SplashScreen(navController = navController)

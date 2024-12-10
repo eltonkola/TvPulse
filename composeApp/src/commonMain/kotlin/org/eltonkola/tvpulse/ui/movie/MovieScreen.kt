@@ -1,41 +1,24 @@
 package org.eltonkola.tvpulse.ui.movie
 
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.max
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import com.composables.icons.lucide.Heart
+import com.composables.icons.lucide.Film
 import com.composables.icons.lucide.Lucide
-import com.composables.icons.lucide.Share
-import kotlinx.coroutines.launch
-import org.eltonkola.tvpulse.ui.components.LazyHeadedList
+import org.eltonkola.tvpulse.data.db.model.WatchStatus
+import org.eltonkola.tvpulse.data.local.model.AppsScreen
+import org.eltonkola.tvpulse.expect.openLink
+import org.eltonkola.tvpulse.expect.shareLink
+import org.eltonkola.tvpulse.ui.components.DividerLine
+import org.eltonkola.tvpulse.ui.components.ErrorUi
 import org.eltonkola.tvpulse.ui.components.LazyTabedHeadedList
 import org.eltonkola.tvpulse.ui.components.LoadingUi
-import org.eltonkola.tvpulse.ui.components.TabScreen
-import org.jetbrains.compose.resources.DrawableResource
-import org.jetbrains.compose.resources.painterResource
-import tvpulse.composeapp.generated.resources.Res
-import tvpulse.composeapp.generated.resources.landing_background
-import kotlin.math.absoluteValue
-import kotlin.math.min
-
+import org.eltonkola.tvpulse.ui.main.explore.tvshows.formatDateToHumanReadable
 
 @Composable
 fun MovieScreen(
@@ -44,45 +27,115 @@ fun MovieScreen(
     viewModel: MovieViewModel = viewModel { MovieViewModel(id) },
 ) {
 
-    val uiState by viewModel.movie.collectAsState(null)
+    val uiState by viewModel.uiState.collectAsState()
 
     when (uiState) {
-        null -> {
+        is MovieUiState.Loading ->{
             LoadingUi()
         }
-
-        else -> {
-
+        is MovieUiState.Error ->{
+            ErrorUi(
+                message = "Error loading movie!",
+                retry = true,
+                retryLabel = "Retry",
+                onRetry = { viewModel.loadTrendingMovies() },
+                icon = Lucide.Film,
+                iconColor = MaterialTheme.colorScheme.error,
+            )
+        }
+        is MovieUiState.Ready ->{
+            val readyState = uiState as MovieUiState.Ready
 
             LazyTabedHeadedList(
                 tabs = listOf(
                     Pair("ABOUT") {
-                            items(100) { index ->
-                                Text(
-                                    "Tab About item $index", modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(16.dp)
-                                )
-                            }
+                          if(readyState.loading){
+                              item{
+                                  LoadingUi(
+                                      modifier = Modifier.fillMaxWidth().height(120.dp)
+                                  )
+                              }
+                          }else if(readyState.fullDetails !=null){
+
+                              readyState.fullDetails.homepage?.let {
+                                  item {
+                                      WhereToWatchRowUi {
+                                          openLink(it)
+                                      }
+                                      DividerLine()
+                                  }
+                              }
+                              item {
+                                  MovieInfoRowUi(readyState.fullDetails)
+                                  DividerLine()
+                              }
+                              readyState.trailer?.let { trailer ->
+                                  item {
+                                      TrailerRowUi(trailer) {
+                                          openLink(it)
+                                      }
+                                      DividerLine()
+                                  }
+                              }
+
+                              if(readyState.cast?.isNotEmpty() == true){
+                                  item {
+                                      CastRowUi(readyState.cast) {
+                                          //TODO - open actor details screen
+                                      }
+                                      DividerLine()
+                                  }
+                              }
+
+                              if(readyState.similar?.isNotEmpty() == true){
+                                  item {
+                                      SimilarMoviesRowUi(readyState.similar, {
+                                          viewModel.addRemoveMovieToWatchlist(it.id)
+                                      }) {
+                                          navController.navigate("${AppsScreen.Movie.name}/${it.id}")
+                                      }
+                                      DividerLine()
+                                  }
+                              }
+
+                              item{
+                                  Spacer(modifier = Modifier.size(16.dp))
+                              }
+
+                          }
                     },
                     Pair("MORE") {
-                        items(100) { index ->
-                            Text(
-                                "Tab More $index", modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(16.dp)
-                            )
+                        if(readyState.loading){
+                            item{
+                                LoadingUi()
+                            }
+                        }else{
+                            item{
+                                Text("Movie more")
+                            }
                         }
                     }
                 ),
                 minHeaderHeight = 120.dp,
                 header = {
-                    MovieHeader(uiState!!, navController)
+                    Column(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        MovieHeader(readyState.movie, navController)
+                        StatusRowUi(
+                            releaseDate = readyState.movie.releaseDate?.formatDateToHumanReadable() ?: "",
+                            watch = readyState.movie.mediaStatus == WatchStatus.COMPLETED,
+                            onClick = { viewModel.onMovieWatchedClick() }
+                        )
+                        DividerLine()
+
+                    }
+
                 }
             )
 
-
         }
+
     }
 
 
