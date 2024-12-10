@@ -34,7 +34,7 @@ class SplashViewModel(
         viewModelScope.launch {
                 val isFirstLaunch = appSettings.isFirstLaunch()
                 Logger.i{ "isFirstLaunch: $isFirstLaunch" }
-                delay(1_000)
+               // delay(1_000)
                 if(isFirstLaunch) {
                     _uiState.update { it.copy(state = SplashOpState.FirstTime) }
                 }else{

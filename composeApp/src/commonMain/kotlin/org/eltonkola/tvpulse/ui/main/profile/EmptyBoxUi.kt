@@ -20,11 +20,13 @@ fun StatsUi(
 ) {
 
     Box(
-        modifier = modifier.border(
+        modifier = modifier
+            .padding(start = 8.dp, end = 8.dp)
+            .border(
             width = 1.dp,
             color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f),
             shape = RoundedCornerShape(4.dp),
-        ).padding(start = 16.dp, end = 16.dp),
+        ),
         contentAlignment = Alignment.Center
     ) {
 

@@ -24,6 +24,7 @@ import org.eltonkola.tvpulse.ui.settings.SettingsScreen
 import org.eltonkola.tvpulse.ui.splash.SplashScreen
 import org.eltonkola.tvpulse.ui.theme.TvPulseTheme
 import org.eltonkola.tvpulse.ui.tutorial.TutorialScreen
+import org.eltonkola.tvpulse.ui.tvshow.TvShowScreen
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalCoilApi::class)
@@ -74,10 +75,10 @@ fun App(
                     SettingsScreen(navController = navController)
                 }
                 composable(route = "${AppsScreen.TvShow.name}/{id}") { backStackEntry ->
-//                    SingleExercise(
-//                        navController = navController,
-//                        backStackEntry.arguments!!.getString("id")!!
-//                    )
+                    TvShowScreen(
+                        backStackEntry.arguments!!.getString("id")!!.toInt(),
+                        navController = navController,
+                    )
                 }
                 composable(route = "${AppsScreen.Movie.name}/{id}") { backStackEntry ->
                     MovieScreen(
@@ -85,6 +86,8 @@ fun App(
                         navController = navController,
                     )
                 }
+
+
 
 //                dialog(route = AppsScreen.TrackMoodDialog.name) {
 //                    TrackMoodDialog(navController = navController)
