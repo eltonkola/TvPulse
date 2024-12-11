@@ -34,8 +34,9 @@ class MediaEntity : RealmObject {
 
     // Tracking metadata
     var userWatchStatus: String = WatchStatus.NOT_WATCHED.status
-    var userRating: Float? = null
-    var personalNotes: String? = null
+    var userRating: Int? = null
+    var userEmotion: Int? = null
+    var userComment: String? = null
 
     // Minimal stats
     var voteAverage: Double = 0.0

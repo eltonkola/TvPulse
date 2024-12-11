@@ -14,11 +14,38 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.composables.icons.lucide.*
+import org.eltonkola.tvpulse.data.db.model.MediaEntity
+import org.eltonkola.tvpulse.data.db.model.WatchStatus
+import org.eltonkola.tvpulse.data.remote.model.MovieDetails
+import org.eltonkola.tvpulse.ui.main.explore.tvshows.formatDateToHumanReadable
+
+data class StatusMovieData(
+    val releaseDate: String,
+    val watched: Boolean
+)
+
+fun getStatusDataForMovie(movie: MediaEntity?, fullMovie: MovieDetails?): StatusMovieData {
+    return if(movie !=null){
+        StatusMovieData(
+            releaseDate = movie.releaseDate?.formatDateToHumanReadable() ?: "",
+            watched = movie.mediaStatus == WatchStatus.COMPLETED,
+        )
+    } else if(fullMovie !=null){
+        StatusMovieData(
+            releaseDate = fullMovie.release_date.formatDateToHumanReadable(),
+            watched = false,
+        )
+    } else{
+        StatusMovieData(
+            releaseDate = "",
+            watched = false,
+        )
+    }
+}
 
 @Composable
 fun StatusRowUi(
-    releaseDate: String,
-    watch: Boolean,
+    data: StatusMovieData,
     onClick: () -> Unit
 ) {
     Row (
@@ -30,9 +57,9 @@ fun StatusRowUi(
             contentDescription = null,
             modifier = Modifier.size(16.dp)
         )
-        Text(text = releaseDate, modifier = Modifier.padding(start = 8.dp))
+        Text(text = data.releaseDate, modifier = Modifier.padding(start = 8.dp))
         Spacer(modifier = Modifier.size(8.dp))
-        if (watch) {
+        if (data.watched) {
             Icon(
                 imageVector = Lucide.Eye,
                 contentDescription = null,
@@ -56,7 +83,7 @@ fun StatusRowUi(
             Icon(
                 imageVector = Lucide.CircleCheck,
                 contentDescription = null,
-                tint = if(watch) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground,
+                tint = if(data.watched) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground,
             )
         }
 

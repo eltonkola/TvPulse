@@ -1,7 +1,6 @@
 package org.eltonkola.tvpulse.ui.movie
 
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -15,15 +14,48 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import com.composables.icons.lucide.*
-import dev.carlsen.flagkit.FlagKit
 import org.eltonkola.tvpulse.data.db.model.MediaEntity
-import org.eltonkola.tvpulse.ui.main.explore.tvshows.formatDateToHumanReadable
+import org.eltonkola.tvpulse.data.remote.model.MovieDetails
+
+data class HeaderData(
+    val posterPath: String,
+    val title: String,
+    val runtime: Int,
+    val genres: String,
+)
+
+fun gethederDataForMovie(movie: MediaEntity?, fullMovie: MovieDetails?): HeaderData {
+    return if(movie !=null){
+        HeaderData(
+            posterPath = movie.posterPath ?: "",
+            title = movie.title,
+            runtime = movie.runtime ?: 0,
+            genres = movie.genres.joinToString { it.title }
+        )
+    } else if(fullMovie !=null){
+        HeaderData(
+            posterPath = fullMovie.poster_path ?: "",
+            title = fullMovie.title,
+            runtime = fullMovie.runtime,
+            genres = fullMovie.genres.joinToString { it.name }
+        )
+    } else{
+        HeaderData(
+            posterPath = "",
+            title = "",
+            runtime = 0,
+            genres = ""
+        )
+    }
+}
 
 @Composable
 fun MovieHeader(
-    movie : MediaEntity,
-    navController: NavController
+    movie : HeaderData,
+    navController: NavController,
+    onMenuClick: () -> Unit
 ) {
+
     Box(
         modifier = Modifier.fillMaxWidth().aspectRatio(1.8f),
         contentAlignment = Alignment.BottomStart
@@ -64,9 +96,7 @@ fun MovieHeader(
                 )
             }
             Spacer(modifier = Modifier.weight(1f))
-            IconButton(onClick = {
-                //TODO - show menu with actions
-            }) {
+            IconButton(onClick = onMenuClick) {
                 Icon(imageVector = Lucide.Ellipsis, contentDescription = "Menu")
             }
         }
@@ -90,14 +120,13 @@ fun MovieHeader(
             ) {
                   Text(
                     text = "${movie.runtime?.formatRuntime() ?: "Unknown duration"} · " +
-                            movie.genres.map { it.title }.joinToString(),
+                            movie.genres,
                     modifier = Modifier.fillMaxWidth(),
                     style = MaterialTheme.typography.titleMedium
                 )
             }
 
         }
-
 
     }
 }

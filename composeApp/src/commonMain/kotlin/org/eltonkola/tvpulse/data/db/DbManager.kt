@@ -2,6 +2,7 @@ package org.eltonkola.tvpulse.data.db
 
 
 import co.touchlab.kermit.Logger
+import io.ktor.client.utils.EmptyContent.status
 import io.realm.kotlin.MutableRealm
 import io.realm.kotlin.Realm
 import io.realm.kotlin.RealmConfiguration
@@ -9,6 +10,7 @@ import io.realm.kotlin.exceptions.RealmException
 import io.realm.kotlin.ext.query
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import org.eltonkola.tvpulse.DiGraph.dbManager
 import org.eltonkola.tvpulse.data.db.model.GenreEntity
 import org.eltonkola.tvpulse.data.db.model.MediaEntity
 import org.eltonkola.tvpulse.data.db.model.MediaType
@@ -122,6 +124,80 @@ class DbManager {
                 if (mediaEntity != null) {
                     // Update the userWatchStatus field
                     mediaEntity.userWatchStatus = status.status
+                } else {
+                    throw IllegalArgumentException("MediaEntity with id $id not found.")
+                }
+            }
+            true // Success
+        } catch (e: RealmException) {
+            e.printStackTrace()
+            false // Failure
+        }
+    }
+
+    suspend fun setMovieFavorites(favorites:Boolean, id: Int) : Boolean {
+        return try {
+            realm.write {
+                // Query the entity by its ID
+                val mediaEntity = query<MediaEntity>("id == $0", id).first().find()
+                if (mediaEntity != null) {
+                    // Update the userWatchStatus field
+                    mediaEntity.isFavorite = favorites
+                } else {
+                    throw IllegalArgumentException("MediaEntity with id $id not found.")
+                }
+            }
+            true // Success
+        } catch (e: RealmException) {
+            e.printStackTrace()
+            false // Failure
+        }
+    }
+    suspend fun setMovieRate(rate: Int, id: Int) : Boolean {
+        return try {
+            realm.write {
+                // Query the entity by its ID
+                val mediaEntity = query<MediaEntity>("id == $0", id).first().find()
+                if (mediaEntity != null) {
+                    // Update the userWatchStatus field
+                    mediaEntity.userRating = rate
+                } else {
+                    throw IllegalArgumentException("MediaEntity with id $id not found.")
+                }
+            }
+            true // Success
+        } catch (e: RealmException) {
+            e.printStackTrace()
+            false // Failure
+        }
+    }
+    suspend fun emotionMovie(emotion: Int, id: Int) : Boolean {
+        return try {
+            realm.write {
+                // Query the entity by its ID
+                val mediaEntity = query<MediaEntity>("id == $0", id).first().find()
+                if (mediaEntity != null) {
+                    // Update the userWatchStatus field
+                    mediaEntity.userEmotion = emotion
+                } else {
+                    throw IllegalArgumentException("MediaEntity with id $id not found.")
+                }
+            }
+            true // Success
+        } catch (e: RealmException) {
+            e.printStackTrace()
+            false // Failure
+        }
+    }
+
+    suspend fun updateComment(comment: String, id: Int) : Boolean {
+        return try {
+            realm.write {
+                // Query the entity by its ID
+                val mediaEntity = query<MediaEntity>("id == $0", id).first().find()
+                if (mediaEntity != null) {
+                    // Update the userWatchStatus field
+                    mediaEntity.userComment = comment
                 } else {
                     throw IllegalArgumentException("MediaEntity with id $id not found.")
                 }

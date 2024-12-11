@@ -1,6 +1,7 @@
 package org.eltonkola.tvpulse.ui.main.explore.movies
 
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -20,6 +21,7 @@ import com.composables.icons.lucide.Lucide
 import com.dokar.sonner.Toaster
 import com.dokar.sonner.rememberToasterState
 import org.eltonkola.tvpulse.data.Consts
+import org.eltonkola.tvpulse.data.local.model.AppsScreen
 import org.eltonkola.tvpulse.ui.components.ErrorUi
 import org.eltonkola.tvpulse.ui.components.ExploreCard
 import org.eltonkola.tvpulse.ui.components.LoadingUi
@@ -57,7 +59,7 @@ fun TrendingMoviesScreen(
                     items(movies.itemCount) {
                         if(movies[it] != null) {
                             ExploreCard(
-                                modifier = Modifier.fillMaxWidth(),
+                                modifier = Modifier.fillMaxWidth().clickable { navController.navigate("${AppsScreen.Movie.name}/${movies[it]!!.id}") },
                                 icon = Lucide.Film,
                                 title = movies[it]!!.title,
                                 country = movies[it]!!.original_language,

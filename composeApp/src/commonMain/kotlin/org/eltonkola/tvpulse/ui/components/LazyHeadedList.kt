@@ -36,6 +36,7 @@ import kotlin.math.roundToInt
 
 @Composable
 fun LazyHeadedList(
+    modifier: Modifier = Modifier,
     minHeaderHeight: Dp = 100.dp,
     header: @Composable BoxScope.() -> Unit,
     content: LazyListScope.() -> Unit
@@ -57,7 +58,7 @@ fun LazyHeadedList(
     }
 
     Box(
-        Modifier
+        modifier
             .fillMaxSize()
             .nestedScroll(nestedScrollConnection)
     ) {

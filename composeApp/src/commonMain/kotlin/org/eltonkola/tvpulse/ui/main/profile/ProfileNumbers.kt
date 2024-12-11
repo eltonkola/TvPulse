@@ -45,7 +45,7 @@ fun ProfileNumbers(
                     style = MaterialTheme.typography.bodyMedium,
                 )
             }
-            DividerLine(height = 66.dp)
+            DividerLine(height = 66.dp, width = 0.5.dp)
 
             Column(
                 modifier = Modifier.weight(1f).height(66.dp),
@@ -68,7 +68,7 @@ fun ProfileNumbers(
                 )
             }
 
-            DividerLine(height = 66.dp)
+            DividerLine(height = 66.dp, width = 0.5.dp)
             Column(
                 modifier = Modifier.weight(1f).height(66.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,

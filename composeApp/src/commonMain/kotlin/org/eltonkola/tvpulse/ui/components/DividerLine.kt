@@ -24,7 +24,7 @@ fun DividerLine(
         )
     }else{
         Spacer(
-            modifier = Modifier.width(height)
+            modifier = Modifier.width(width)
                 .height(height)
                 .background(MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f))
         )

@@ -1,6 +1,7 @@
 package org.eltonkola.tvpulse.ui.main.explore.tvshows
 
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.CircularProgressIndicator
@@ -19,6 +20,7 @@ import com.dokar.sonner.rememberToasterState
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.toLocalDate
 import org.eltonkola.tvpulse.data.Consts
+import org.eltonkola.tvpulse.data.local.model.AppsScreen
 import org.eltonkola.tvpulse.ui.components.ErrorUi
 import org.eltonkola.tvpulse.ui.components.ExploreCard
 import org.eltonkola.tvpulse.ui.components.LoadingUi
@@ -55,7 +57,7 @@ fun TrendingShowsScreen(
             items(tvShows.itemCount){
                if(tvShows[it] != null) {
                    ExploreCard(
-                       modifier = Modifier.fillMaxWidth(),
+                       modifier = Modifier.fillMaxWidth().clickable { navController.navigate("${AppsScreen.TvShow.name}/${tvShows[it]!!.id}") },
                        icon = Lucide.Tv,
                        title = tvShows[it]!!.name,
                        country = tvShows[it]!!.origin_country.first(),

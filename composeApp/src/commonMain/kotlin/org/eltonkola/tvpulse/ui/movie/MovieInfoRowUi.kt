@@ -1,6 +1,7 @@
 package org.eltonkola.tvpulse.ui.movie
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.composables.icons.lucide.*
 import org.eltonkola.tvpulse.data.remote.model.MovieDetails
@@ -67,7 +69,12 @@ fun MovieInfoRowUi(fullMovie: MovieDetails) {
 }
 
 @Composable
-private fun StarProgressUi(score: Double, modifier: Modifier = Modifier) {
+fun StarProgressUi(
+    score: Double,
+    modifier: Modifier = Modifier,
+    size: Dp = 18.dp,
+    onRate:(Int) -> Unit = {}
+) {
     val primaryColor = MaterialTheme.colorScheme.primary
     val defaultColor = Color.Gray
 
@@ -84,7 +91,7 @@ private fun StarProgressUi(score: Double, modifier: Modifier = Modifier) {
                 imageVector = Lucide.Star,
                 contentDescription = "Star $i",
                 tint = color,
-                modifier = Modifier.size(18.dp)
+                modifier = Modifier.size(size).clickable { onRate(i) }
             )
         }
     }

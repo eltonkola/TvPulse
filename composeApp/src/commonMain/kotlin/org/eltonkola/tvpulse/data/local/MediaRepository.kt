@@ -1,5 +1,6 @@
 package org.eltonkola.tvpulse.data.local
 
+import io.realm.kotlin.ext.query
 import io.realm.kotlin.ext.toRealmList
 import kotlinx.coroutines.flow.Flow
 import org.eltonkola.tvpulse.data.db.DbManager
@@ -45,6 +46,15 @@ class MediaRepository (
             })
         }
 
+    }
+
+    suspend fun removeMovieFromWatchlist(id: Int){
+        dbManager.writeTransaction {
+            val mediaToDelete: MediaEntity? = query<MediaEntity>("id == $0", id.toString()).first().find()
+            mediaToDelete?.let {
+                delete(it)
+            }
+        }
     }
 
     suspend fun addTvShowToWatchlist(id: Int){
@@ -107,5 +117,20 @@ class MediaRepository (
     suspend fun setMovieWatched(status: WatchStatus, id: Int) : Boolean {
         return dbManager.setMovieWatched(status, id)
     }
+    suspend fun setMovieFavorite(favorite: Boolean, id: Int) : Boolean {
+        return dbManager.setMovieFavorites(favorite, id)
+    }
+    suspend fun setMovieRate(rate: Int, id: Int) : Boolean {
+        return dbManager.setMovieRate(rate, id)
+    }
+
+    suspend fun emotionMovie(emotion: Int, id: Int) : Boolean {
+        return dbManager.emotionMovie(emotion, id)
+    }
+
+    suspend fun updateComment(comment: String, id: Int) : Boolean {
+        return dbManager.updateComment(comment, id)
+    }
+
 
 }

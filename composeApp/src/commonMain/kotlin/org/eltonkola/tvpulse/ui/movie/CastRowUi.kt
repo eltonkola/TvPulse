@@ -87,13 +87,11 @@ fun CastRowUi(cast: List<CastMember>, openProfile:(CastMember) -> Unit ) {
                     ){
                         Text(
                             text = actor.name,
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Bold
+                            style = MaterialTheme.typography.titleMedium,
                         )
                         Text(
                             text = actor.character,
-                            fontSize = 10.sp,
-                            fontWeight = FontWeight.Bold
+                            style = MaterialTheme.typography.titleSmall,
                         )
 
                     }
