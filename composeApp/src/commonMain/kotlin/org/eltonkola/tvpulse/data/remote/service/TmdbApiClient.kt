@@ -45,6 +45,7 @@ class TmdbApiClient {
 
             if (response.status.isSuccess()) {
                 val responseBody = response.bodyAsText()
+                Logger.i { "endpoint: $endpoint" }
                 Logger.i { "responseBody: $responseBody" }
                 json.decodeFromString(responseBody)
             } else {
@@ -92,5 +93,19 @@ class TmdbApiClient {
         return fetchFromApi(endpoint)
     }
 
+    suspend fun getPerson(id: Int): Person {
+        val endpoint = "$baseUrl/person/$id"
+        return fetchFromApi(endpoint)
+    }
+
+    suspend fun getActorMovies(id: Int): PersonCreditsResponse {
+        val endpoint = "$baseUrl/person/$id/credits"
+        return fetchFromApi(endpoint)
+    }
+
+    suspend fun getActorTvShows(id: Int): PersonCreditsResponse {
+        val endpoint = "$baseUrl/person/$id/tv_credits"
+        return fetchFromApi(endpoint)
+    }
 
 }

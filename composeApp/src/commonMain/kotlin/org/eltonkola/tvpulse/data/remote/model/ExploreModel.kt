@@ -167,3 +167,24 @@ data class CrewMember(
     val job: String,
     @SerialName("profile_path") val profilePath: String?
 )
+
+
+@Serializable
+data class Person(
+    val adult: Boolean,
+    @SerialName("also_known_as") val alsoKnownAs: List<String>,
+    val biography: String,
+    val birthday: String? = null,
+    val deathday: String?,
+    val gender: Int,
+    val homepage: String?,
+    val id: Int,
+    @SerialName("imdb_id") val imdbId: String,
+    @SerialName("known_for_department")val knownForDepartment: String,
+    val name: String,
+    @SerialName("place_of_birth")val placeOfBirth: String,
+    val popularity: Double,
+    @SerialName("profile_path")val profilePath: String
+)
+
+

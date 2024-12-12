@@ -91,8 +91,7 @@ fun MovieHeader(
             }) {
                 Icon(
                     imageVector = Lucide.ChevronDown,
-                    contentDescription = "Back",
-                    tint = MaterialTheme.colorScheme.primary
+                    contentDescription = "Back"
                 )
             }
             Spacer(modifier = Modifier.weight(1f))

@@ -60,6 +60,13 @@ fun MovieInfoRowUi(fullMovie: MovieDetails) {
         Spacer(modifier = Modifier.size(8.dp))
 
         Text(
+            text = fullMovie.tagline,
+            modifier = Modifier.fillMaxWidth(),
+            style = MaterialTheme.typography.titleSmall
+        )
+        Spacer(modifier = Modifier.size(2.dp))
+
+        Text(
             text = fullMovie.overview,
             style = MaterialTheme.typography.bodyLarge
         )

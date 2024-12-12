@@ -3,7 +3,10 @@ package org.eltonkola.tvpulse.ui.movie
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -13,7 +16,6 @@ import androidx.navigation.NavHostController
 import com.composables.icons.lucide.Film
 import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.Plus
-import org.eltonkola.tvpulse.data.db.model.WatchStatus
 import org.eltonkola.tvpulse.data.local.model.AppsScreen
 import org.eltonkola.tvpulse.expect.openLink
 import org.eltonkola.tvpulse.expect.shareLink
@@ -21,7 +23,6 @@ import org.eltonkola.tvpulse.ui.components.DividerLine
 import org.eltonkola.tvpulse.ui.components.ErrorUi
 import org.eltonkola.tvpulse.ui.components.LazyTabedHeadedList
 import org.eltonkola.tvpulse.ui.components.LoadingUi
-import org.eltonkola.tvpulse.ui.main.explore.tvshows.formatDateToHumanReadable
 
 @Composable
 fun MovieScreen(
@@ -34,10 +35,11 @@ fun MovieScreen(
     var showMenu by remember { mutableStateOf(false) }
 
     when (uiState) {
-        is MovieUiState.Loading ->{
+        is MovieUiState.Loading -> {
             LoadingUi()
         }
-        is MovieUiState.Error ->{
+
+        is MovieUiState.Error -> {
             ErrorUi(
                 message = "Error loading movie!",
                 retry = true,
@@ -47,7 +49,8 @@ fun MovieScreen(
                 iconColor = MaterialTheme.colorScheme.error,
             )
         }
-        is MovieUiState.Ready ->{
+
+        is MovieUiState.Ready -> {
             val readyState = uiState as MovieUiState.Ready
 
             Column(modifier = Modifier.fillMaxSize()) {
@@ -66,7 +69,10 @@ fun MovieScreen(
                         Column(
                             modifier = Modifier.fillMaxWidth()
                         ) {
-                            MovieHeader(gethederDataForMovie(readyState.savedMovie, readyState.fullDetails), navController){
+                            MovieHeader(
+                                gethederDataForMovie(readyState.savedMovie, readyState.fullDetails),
+                                navController
+                            ) {
                                 showMenu = true
                             }
                             StatusRowUi(
@@ -79,7 +85,7 @@ fun MovieScreen(
 
                     }
                 )
-                if((uiState as MovieUiState.Ready).savedMovie == null){
+                if ((uiState as MovieUiState.Ready).savedMovie == null) {
                     Row(
                         modifier = Modifier.fillMaxWidth().padding(8.dp),
                     ) {
@@ -88,7 +94,7 @@ fun MovieScreen(
                                 viewModel.addRemoveMovieToWatchlist()
                             },
                             shape = RoundedCornerShape(8.dp),
-                        ){
+                        ) {
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
                                 verticalAlignment = Alignment.CenterVertically
@@ -100,7 +106,6 @@ fun MovieScreen(
                         }
 
                     }
-
 
                 }
             }
@@ -121,19 +126,14 @@ fun MovieScreen(
                     viewModel.removeFromFavorites()
                 },
                 isFavorite = readyState.savedMovie?.isFavorite == true,
-                isSaved = readyState.savedMovie !=null
+                isSaved = readyState.savedMovie != null
             )
-
 
         }
 
     }
 
 }
-
-
-
-
 
 private fun LazyListScope.movieAboutTab(
     readyState: MovieUiState.Ready,
@@ -172,7 +172,7 @@ private fun LazyListScope.movieAboutTab(
         if (readyState.cast?.isNotEmpty() == true) {
             item {
                 CastRowUi(readyState.cast) {
-                    //TODO - open actor details screen
+                    navController.navigate("${AppsScreen.Person.name}/${it.id}")
                 }
                 DividerLine()
             }
@@ -180,9 +180,7 @@ private fun LazyListScope.movieAboutTab(
 
         if (readyState.similar?.isNotEmpty() == true) {
             item {
-                SimilarMoviesRowUi(readyState.similar, {
-                    viewModel.addRemoveMovieToWatchlist()
-                }) {
+                SimilarMoviesRowUi(readyState.similar) {
                     navController.navigate("${AppsScreen.Movie.name}/${it.id}")
                 }
                 DividerLine()
@@ -195,7 +193,6 @@ private fun LazyListScope.movieAboutTab(
 
     }
 }
-
 
 private fun LazyListScope.movieMoreTab(
     readyState: MovieUiState.Ready,
@@ -210,9 +207,9 @@ private fun LazyListScope.movieMoreTab(
         }
     } else {
 
-        item{
+        item {
             UserCommentRowUi(
-                userComment =  readyState.savedMovie?.userComment ?: "",
+                userComment = readyState.savedMovie?.userComment ?: "",
                 updateComment = {
                     viewModel.updateComment(it)
                 }
@@ -221,8 +218,7 @@ private fun LazyListScope.movieMoreTab(
             DividerLine()
         }
 
-
-        item{
+        item {
             RateMovieRowUi(
                 rate = readyState.savedMovie?.userRating ?: 0,
                 onRate = {
@@ -232,7 +228,7 @@ private fun LazyListScope.movieMoreTab(
             DividerLine()
         }
 
-        item{
+        item {
             EmotionMovieRowUi(
                 selectedEmotion = readyState.savedMovie?.userEmotion ?: -1,
                 onRate = {
@@ -242,20 +238,17 @@ private fun LazyListScope.movieMoreTab(
             DividerLine()
         }
 
-
-
-        item{
+        item {
             FavoriteRowUi(
                 isFavorite = readyState.savedMovie?.isFavorite == true,
                 onClick = {
-                    if(readyState.savedMovie?.isFavorite == true){
+                    if (readyState.savedMovie?.isFavorite == true) {
                         viewModel.removeFromFavorites()
-                    }else{
+                    } else {
                         viewModel.addToFavorites()
                     }
                 }
             )
-
         }
 
         item {

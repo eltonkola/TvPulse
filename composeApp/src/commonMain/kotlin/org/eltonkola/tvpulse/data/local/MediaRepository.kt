@@ -8,12 +8,7 @@ import org.eltonkola.tvpulse.data.db.model.GenreEntity
 import org.eltonkola.tvpulse.data.db.model.MediaEntity
 import org.eltonkola.tvpulse.data.db.model.MediaType
 import org.eltonkola.tvpulse.data.db.model.WatchStatus
-import org.eltonkola.tvpulse.data.remote.model.MovieCreditsResponse
-import org.eltonkola.tvpulse.data.remote.model.MovieDetails
-import org.eltonkola.tvpulse.data.remote.model.MovieVideosResponse
-import org.eltonkola.tvpulse.data.remote.model.TmdbListResponse
-import org.eltonkola.tvpulse.data.remote.model.TrendingMovieDetails
-import org.eltonkola.tvpulse.data.remote.model.TvShowDetails
+import org.eltonkola.tvpulse.data.remote.model.*
 import org.eltonkola.tvpulse.data.remote.service.TmdbApiClient
 
 class MediaRepository (
@@ -132,5 +127,15 @@ class MediaRepository (
         return dbManager.updateComment(comment, id)
     }
 
+    suspend fun getPerson(id: Int): Person {
+        return tmdbApiClient.getPerson(id)
+    }
+
+    suspend fun getActorMovies(id: Int): PersonCreditsResponse {
+        return tmdbApiClient.getActorMovies(id)
+    }
+    suspend fun getActorTvShows(id: Int): PersonCreditsResponse {
+        return tmdbApiClient.getActorTvShows(id)
+    }
 
 }

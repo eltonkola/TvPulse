@@ -7,4 +7,5 @@ enum class AppsScreen(val title: String) {
     TvShow(title = "tv_show"),
     Movie(title = "movies"),
     Settings(title = "settings"),
+    Person(title = "person"),
 }
