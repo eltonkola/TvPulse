@@ -9,13 +9,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import org.eltonkola.tvpulse.data.Consts
-import org.eltonkola.tvpulse.data.remote.model.TrendingMovieDetails
+import org.eltonkola.tvpulse.data.local.SimpleMedia
 import org.eltonkola.tvpulse.ui.components.MediaCard
 
 @Composable
-fun SimilarMoviesRowUi(movies: List<TrendingMovieDetails>,
-                       openMovie:(TrendingMovieDetails) -> Unit ) {
+fun SimilarMoviesRowUi(movies: List<SimpleMedia>,
+                       openMovie:(Int) -> Unit ) {
     Column (
         modifier = Modifier.fillMaxWidth().padding(8.dp)
     ){
@@ -39,8 +38,8 @@ fun SimilarMoviesRowUi(movies: List<TrendingMovieDetails>,
                     modifier = Modifier.width(120.dp)
                 ) {
                     MediaCard(
-                        posterUrl = movie.poster_path ?: Consts.DEFAULT_THUMB_URL,
-                        onClick = { openMovie(movie)  }
+                        posterUrl = movie.poster,
+                        onClick = { openMovie(movie.id)  }
                     )
                 }
 

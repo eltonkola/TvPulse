@@ -1,7 +1,8 @@
-package org.eltonkola.tvpulse.ui.movie
+package org.eltonkola.tvpulse.ui.tvshow
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.realm.kotlin.types.annotations.FullText
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -12,85 +13,90 @@ import org.eltonkola.tvpulse.DiGraph
 import org.eltonkola.tvpulse.data.db.model.MediaEntity
 import org.eltonkola.tvpulse.data.db.model.WatchStatus
 import org.eltonkola.tvpulse.data.local.MediaRepository
-import org.eltonkola.tvpulse.data.remote.model.CastMember
-import org.eltonkola.tvpulse.data.remote.model.MovieDetails
-import org.eltonkola.tvpulse.data.remote.model.TrendingMovieDetails
-import org.eltonkola.tvpulse.data.remote.model.VideoResult
+import org.eltonkola.tvpulse.data.remote.model.*
 
-sealed class MovieUiState{
-    data object Loading : MovieUiState()
+sealed class TvShowUiState{
+    data object Loading : TvShowUiState()
     data class Ready(
-        val savedMovie: MediaEntity?=null,
+        val savedTvShow: MediaEntity?=null,
         val loading: Boolean = true,
         val error: Boolean = false,
-        val fullDetails : MovieDetails? = null,
+        val fullDetails : TvShowDetails? = null,
         val trailer: VideoResult? = null,
         val cast: List<CastMember>? = null,
-        val similar: List<TrendingMovieDetails>? = null,
+        val similar: List<TrendingTvShowDetails>? = null,
         val userOperation: Boolean = false,
-        val toastMsg: String? = null
-        ) : MovieUiState()
-    data class Error(val message: String) : MovieUiState()
+        val toastMsg: String? = null,
+        val seasons: List<SeasonResponse>? = null
+        ) : TvShowUiState()
+    data class Error(val message: String) : TvShowUiState()
 }
 
-class MovieViewModel(
+class TvShowViewModel(
     private val id: Int,
     private val mediaRepository: MediaRepository = DiGraph.mediaRepository
 ) : ViewModel() {
 
-    private val _uiState : MutableStateFlow<MovieUiState> = MutableStateFlow(MovieUiState.Loading)
-    val uiState: StateFlow<MovieUiState> = _uiState.asStateFlow()
+    private val _uiState : MutableStateFlow<TvShowUiState> = MutableStateFlow(TvShowUiState.Loading)
+    val uiState: StateFlow<TvShowUiState> = _uiState.asStateFlow()
 
     init {
-        loadTrendingMovies()
+        loadTvShow()
     }
 
-    fun loadTrendingMovies() {
+    fun loadTvShow() {
         viewModelScope.launch {
 
-            _uiState.update { MovieUiState.Loading }
+            _uiState.update { TvShowUiState.Loading }
 
             mediaRepository.getMediaById(id)
                 .stateIn(viewModelScope)
-                .collect { localMovie ->
+                .collect { localTvShow ->
 
-                    if(localMovie == null){
-                        _uiState.value = MovieUiState.Ready(savedMovie = null)
+                    if(localTvShow == null){
+                        _uiState.value = TvShowUiState.Ready(savedTvShow = null)
                     }
 
-                        if(uiState.value is MovieUiState.Ready && localMovie!=null){
+                        if(uiState.value is TvShowUiState.Ready && localTvShow!=null){
                             _uiState.update {
-                                (uiState.value as MovieUiState.Ready).copy(savedMovie = localMovie)
+                                (uiState.value as TvShowUiState.Ready).copy(savedTvShow = localTvShow)
                             }
                         }else{
-                            _uiState.update { MovieUiState.Ready(
-                                savedMovie = localMovie,
+                            _uiState.update { TvShowUiState.Ready(
+                                savedTvShow = localTvShow,
                                 fullDetails = null,
                                 loading = true
                             ) }
 
                             try{
-                                val fullMovie = mediaRepository.getFullMovieById(id)
-                                val trailers = mediaRepository.getMovieTrailers(id)
-                                val cast = mediaRepository.getMovieCredits(id).cast
-                                val similar = mediaRepository.getSimilarMovies(id).results
+                                val fullTvShow = mediaRepository.getFullTvShowById(id)
+                                val trailers = mediaRepository.getTvShowTrailers(id)
+                                val cast = mediaRepository.getTvShowsCredits(id).cast
+                                val similar = mediaRepository.getSimilarTvShows(id).results
+                                val seasons = (1..fullTvShow.number_of_seasons).map {
+                                    mediaRepository.getSeason(id, it)
+                                }
 
                                 _uiState.update {
-                                    MovieUiState.Ready(
-                                        savedMovie = localMovie,
-                                        fullDetails = fullMovie,
+                                    TvShowUiState.Ready(
+                                        savedTvShow = localTvShow,
+                                        fullDetails = fullTvShow,
                                         trailer = trailers.results.firstOrNull(),
                                         cast = cast,
                                         similar = similar,
                                         loading =false,
-                                        error = false
+                                        error = false,
+                                        seasons = seasons
                                     )
                                 }
+
+
+
                             }catch (e: Exception){
                                 e.printStackTrace()
                                 _uiState.update {
-                                    MovieUiState.Ready(
-                                        savedMovie = localMovie,
+                                    TvShowUiState.Ready(
+                                        savedTvShow = localTvShow,
                                         fullDetails = null,
                                         loading =false,
                                         error = true
@@ -107,11 +113,11 @@ class MovieViewModel(
 
     fun addRemoveMovieToWatchlist(){
         viewModelScope.launch {
-            if(_uiState.value is MovieUiState.Ready){
-                val state = _uiState.value as MovieUiState.Ready
-                if(state.savedMovie == null){
+            if(_uiState.value is TvShowUiState.Ready){
+                val state = _uiState.value as TvShowUiState.Ready
+                if(state.savedTvShow == null){
                     //add it
-                    mediaRepository.addMovieToWatchlist(id)
+                    mediaRepository.addTvShowToWatchlist(id)
 
                 }else{
                     //remove it
@@ -125,9 +131,9 @@ class MovieViewModel(
 
         viewModelScope.launch {
 
-            if(uiState.value is MovieUiState.Ready){
-                val state = uiState.value as MovieUiState.Ready
-                val movie = state.savedMovie
+            if(uiState.value is TvShowUiState.Ready){
+                val state = uiState.value as TvShowUiState.Ready
+                val movie = state.savedTvShow
                 val newStatus = if(movie?.mediaStatus == WatchStatus.NOT_WATCHED){
                     WatchStatus.COMPLETED
                 } else {
@@ -152,9 +158,9 @@ class MovieViewModel(
 
     fun addToFavorites() {
         viewModelScope.launch {
-            if(uiState.value is MovieUiState.Ready) {
-                val state = uiState.value as MovieUiState.Ready
-                val movie = state.savedMovie
+            if(uiState.value is TvShowUiState.Ready) {
+                val state = uiState.value as TvShowUiState.Ready
+                val movie = state.savedTvShow
                 if(movie != null) {
                     mediaRepository.setMediaFavorites(true, id)
                 }
@@ -163,9 +169,9 @@ class MovieViewModel(
     }
     fun removeFromFavorites() {
         viewModelScope.launch {
-            if(uiState.value is MovieUiState.Ready) {
-                val state = uiState.value as MovieUiState.Ready
-                val movie = state.savedMovie
+            if(uiState.value is TvShowUiState.Ready) {
+                val state = uiState.value as TvShowUiState.Ready
+                val movie = state.savedTvShow
                 if(movie != null) {
                     mediaRepository.setMediaFavorites(false, id)
                 }
@@ -175,7 +181,7 @@ class MovieViewModel(
 
     fun emotionMovie(emotion: Int) {
         viewModelScope.launch {
-            if(uiState.value is MovieUiState.Ready) {
+            if(uiState.value is TvShowUiState.Ready) {
                 mediaRepository.setEmotionMediaScore(emotion, id)
             }
         }
@@ -183,7 +189,7 @@ class MovieViewModel(
 
     fun updateComment(comment: String) {
         viewModelScope.launch {
-            if(uiState.value is MovieUiState.Ready) {
+            if(uiState.value is TvShowUiState.Ready) {
                 mediaRepository.updateComment(comment, id)
             }
         }
@@ -194,7 +200,7 @@ class MovieViewModel(
 
     fun rateMovie(rate: Int) {
         viewModelScope.launch {
-            if(uiState.value is MovieUiState.Ready) {
+            if(uiState.value is TvShowUiState.Ready) {
                 mediaRepository.setMediaRating(rate, id)
             }
         }

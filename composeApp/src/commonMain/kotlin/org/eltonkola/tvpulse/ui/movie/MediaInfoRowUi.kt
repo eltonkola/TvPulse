@@ -20,12 +20,38 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.composables.icons.lucide.*
 import org.eltonkola.tvpulse.data.remote.model.MovieDetails
+import org.eltonkola.tvpulse.data.remote.model.TvShowDetails
 import org.jetbrains.compose.resources.painterResource
 import tvpulse.composeapp.generated.resources.Res
 import tvpulse.composeapp.generated.resources.logo
 
+data class MediaInfoData(
+    val voteAverage: Double,
+    val rating: String,
+    val tagline: String,
+    val overview: String
+)
+
+fun MovieDetails.toMediaInfoData() : MediaInfoData {
+    return MediaInfoData(
+        voteAverage = this.vote_average,
+        rating = "${this.vote_average}/10 (${this.vote_count} votes)",
+        tagline = this.tagline,
+        overview = this.overview
+    )
+}
+fun TvShowDetails.toMediaInfoData() : MediaInfoData {
+    return MediaInfoData(
+        voteAverage = this.vote_average,
+        rating = "${this.vote_average}/10 (${this.vote_count} votes)",
+        tagline = this.tagline,
+        overview = this.overview
+    )
+}
+
+
 @Composable
-fun MovieInfoRowUi(fullMovie: MovieDetails) {
+fun MediaInfoRowUi(data: MediaInfoData) {
     Column (
         modifier = Modifier.fillMaxWidth().padding(8.dp)
     ){
@@ -49,10 +75,10 @@ fun MovieInfoRowUi(fullMovie: MovieDetails) {
                 contentScale = ContentScale.Crop
             )
             Spacer(modifier = Modifier.size(4.dp))
-            StarProgressUi(fullMovie.vote_average)
+            StarProgressUi(data.voteAverage)
             Spacer(modifier = Modifier.size(2.dp))
             Text(
-                text = "${fullMovie.vote_average}/10 (${fullMovie.vote_count} votes)",
+                text = data.rating,
                 style = MaterialTheme.typography.bodyMedium
             )
         }
@@ -60,14 +86,14 @@ fun MovieInfoRowUi(fullMovie: MovieDetails) {
         Spacer(modifier = Modifier.size(8.dp))
 
         Text(
-            text = fullMovie.tagline,
+            text = data.tagline,
             modifier = Modifier.fillMaxWidth(),
             style = MaterialTheme.typography.titleSmall
         )
         Spacer(modifier = Modifier.size(2.dp))
 
         Text(
-            text = fullMovie.overview,
+            text = data.overview,
             style = MaterialTheme.typography.bodyLarge
         )
 

@@ -83,13 +83,29 @@ class TmdbApiClient {
         val endpoint = "$baseUrl/movie/$id/videos"
         return fetchFromApi(endpoint)
     }
+
+    suspend fun getTvShowTrailers(id: Int): MovieVideosResponse {
+        val endpoint = "$baseUrl/tv/$id/videos"
+        return fetchFromApi(endpoint)
+    }
+
     suspend fun getMovieCredits(id: Int): MovieCreditsResponse {
         val endpoint = "$baseUrl/movie/$id/credits"
         return fetchFromApi(endpoint)
     }
 
+    suspend fun getTvShowsCredits(id: Int): MovieCreditsResponse {
+        val endpoint = "$baseUrl/tv/$id/credits"
+        return fetchFromApi(endpoint)
+    }
+
     suspend fun getSimilarMovies(id: Int): TmdbListResponse<TrendingMovieDetails> {
         val endpoint = "$baseUrl/movie/$id/similar"
+        return fetchFromApi(endpoint)
+    }
+
+    suspend fun getSimilarTvShows(id: Int): TmdbListResponse<TrendingTvShowDetails> {
+        val endpoint = "$baseUrl/tv/$id/similar"
         return fetchFromApi(endpoint)
     }
 
@@ -103,8 +119,15 @@ class TmdbApiClient {
         return fetchFromApi(endpoint)
     }
 
+
     suspend fun getActorTvShows(id: Int): PersonCreditsResponse {
         val endpoint = "$baseUrl/person/$id/tv_credits"
+        return fetchFromApi(endpoint)
+    }
+
+
+    suspend fun getSeason(id: Int, s: Int): SeasonResponse {
+        val endpoint = "$baseUrl/tv/$id/season/$s"
         return fetchFromApi(endpoint)
     }
 

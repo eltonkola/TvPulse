@@ -16,6 +16,7 @@ import coil3.compose.AsyncImage
 import com.composables.icons.lucide.*
 import org.eltonkola.tvpulse.data.db.model.MediaEntity
 import org.eltonkola.tvpulse.data.remote.model.MovieDetails
+import org.eltonkola.tvpulse.data.remote.model.TvShowDetails
 
 data class HeaderData(
     val posterPath: String,
@@ -37,6 +38,31 @@ fun gethederDataForMovie(movie: MediaEntity?, fullMovie: MovieDetails?): HeaderD
             posterPath = fullMovie.poster_path ?: "",
             title = fullMovie.title,
             runtime = fullMovie.runtime,
+            genres = fullMovie.genres.joinToString { it.name }
+        )
+    } else{
+        HeaderData(
+            posterPath = "",
+            title = "",
+            runtime = 0,
+            genres = ""
+        )
+    }
+}
+
+fun gethederDataForTvShow(movie: MediaEntity?, fullMovie: TvShowDetails?): HeaderData {
+    return if(movie !=null){
+        HeaderData(
+            posterPath = movie.posterPath ?: "",
+            title = movie.title,
+            runtime = movie.runtime ?: 0,
+            genres = movie.genres.joinToString { it.title }
+        )
+    } else if(fullMovie !=null){
+        HeaderData(
+            posterPath = fullMovie.poster_path ?: "",
+            title = fullMovie.name,
+            runtime = 0, //TODO - fix this later //fullMovie.runtime,
             genres = fullMovie.genres.joinToString { it.name }
         )
     } else{

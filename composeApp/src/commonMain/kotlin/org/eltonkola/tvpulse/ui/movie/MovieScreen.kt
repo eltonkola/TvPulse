@@ -17,6 +17,7 @@ import com.composables.icons.lucide.Film
 import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.Plus
 import org.eltonkola.tvpulse.data.local.model.AppsScreen
+import org.eltonkola.tvpulse.data.remote.model.toLocalModel
 import org.eltonkola.tvpulse.expect.openLink
 import org.eltonkola.tvpulse.expect.shareLink
 import org.eltonkola.tvpulse.ui.components.DividerLine
@@ -157,7 +158,7 @@ private fun LazyListScope.movieAboutTab(
             }
         }
         item {
-            MovieInfoRowUi(readyState.fullDetails)
+            MediaInfoRowUi(readyState.fullDetails.toMediaInfoData())
             DividerLine()
         }
         readyState.trailer?.let { trailer ->
@@ -180,8 +181,8 @@ private fun LazyListScope.movieAboutTab(
 
         if (readyState.similar?.isNotEmpty() == true) {
             item {
-                SimilarMoviesRowUi(readyState.similar) {
-                    navController.navigate("${AppsScreen.Movie.name}/${it.id}")
+                SimilarMoviesRowUi(readyState.similar.map { it.toLocalModel() }) {
+                    navController.navigate("${AppsScreen.Movie.name}/$it")
                 }
                 DividerLine()
             }

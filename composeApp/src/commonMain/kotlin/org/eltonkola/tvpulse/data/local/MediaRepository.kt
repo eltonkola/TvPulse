@@ -4,7 +4,6 @@ import io.realm.kotlin.ext.query
 import io.realm.kotlin.ext.toRealmList
 import kotlinx.coroutines.flow.Flow
 import org.eltonkola.tvpulse.data.db.DbManager
-import org.eltonkola.tvpulse.data.db.model.GenreEntity
 import org.eltonkola.tvpulse.data.db.model.MediaEntity
 import org.eltonkola.tvpulse.data.db.model.MediaType
 import org.eltonkola.tvpulse.data.db.model.WatchStatus
@@ -43,7 +42,7 @@ class MediaRepository (
 
     }
 
-    suspend fun removeMovieFromWatchlist(id: Int){
+    suspend fun removeMediaFromWatchlist(id: Int){
         dbManager.writeTransaction {
             val mediaToDelete: MediaEntity? = query<MediaEntity>("id == $0", id.toString()).first().find()
             mediaToDelete?.let {
@@ -82,12 +81,8 @@ class MediaRepository (
 
     }
 
-    fun getMovieById(id: Int): Flow<MediaEntity?> {
-        return dbManager.getMovieById(id)
-    }
-
-    fun getTvShowById(id: Int): Flow<MediaEntity?> {
-        return dbManager.getTvShowById(id)
+    fun getMediaById(id: Int): Flow<MediaEntity?> {
+        return dbManager.getMediaFlowById(id)
     }
 
     suspend fun getFullMovieById(id: Int): MovieDetails {
@@ -98,29 +93,42 @@ class MediaRepository (
         return tmdbApiClient.getMovieTrailers(id)
     }
 
+    suspend fun getTvShowTrailers(id: Int): MovieVideosResponse {
+        return tmdbApiClient.getTvShowTrailers(id)
+    }
+
     suspend fun getMovieCredits(id: Int): MovieCreditsResponse {
         return tmdbApiClient.getMovieCredits(id)
+    }
+
+    suspend fun getTvShowsCredits(id: Int): MovieCreditsResponse {
+        return tmdbApiClient.getTvShowsCredits(id)
     }
 
     suspend fun getSimilarMovies(id: Int): TmdbListResponse<TrendingMovieDetails> {
         return tmdbApiClient.getSimilarMovies(id)
     }
+
+    suspend fun getSimilarTvShows(id: Int): TmdbListResponse<TrendingTvShowDetails> {
+        return tmdbApiClient.getSimilarTvShows(id)
+    }
+
     suspend fun getFullTvShowById(id: Int): TvShowDetails {
         return tmdbApiClient.getTvShowDetails(id)
     }
 
-    suspend fun setMovieWatched(status: WatchStatus, id: Int) : Boolean {
-        return dbManager.setMovieWatched(status, id)
+    suspend fun setMediaWatchedStatus(status: WatchStatus, id: Int) : Boolean {
+        return dbManager.setMediaWatchedStatus(status, id)
     }
-    suspend fun setMovieFavorite(favorite: Boolean, id: Int) : Boolean {
-        return dbManager.setMovieFavorites(favorite, id)
+    suspend fun setMediaFavorites(favorite: Boolean, id: Int) : Boolean {
+        return dbManager.setMediaFavorites(favorite, id)
     }
-    suspend fun setMovieRate(rate: Int, id: Int) : Boolean {
-        return dbManager.setMovieRate(rate, id)
+    suspend fun setMediaRating(rate: Int, id: Int) : Boolean {
+        return dbManager.setMediaRating(rate, id)
     }
 
-    suspend fun emotionMovie(emotion: Int, id: Int) : Boolean {
-        return dbManager.emotionMovie(emotion, id)
+    suspend fun setEmotionMediaScore(emotion: Int, id: Int) : Boolean {
+        return dbManager.setEmotionMediaScore(emotion, id)
     }
 
     suspend fun updateComment(comment: String, id: Int) : Boolean {
@@ -136,6 +144,10 @@ class MediaRepository (
     }
     suspend fun getActorTvShows(id: Int): PersonCreditsResponse {
         return tmdbApiClient.getActorTvShows(id)
+    }
+
+    suspend fun getSeason(tvShowId: Int, season: Int): SeasonResponse {
+        return tmdbApiClient.getSeason(tvShowId, season)
     }
 
 }

@@ -46,11 +46,16 @@ class MediaEntity : RealmObject {
     // For TV Shows
     var numberOfSeasons: Int = 0
     var numberOfEpisodes: Int = 0
+    var episodes: RealmList<EpisodeEntity> = realmListOf() //we will use this to track watched episodes
+
 
     // For Movies
     var runtime: Int? = null // movie length in minutes
 
     var isFavorite: Boolean = false
+
+
+
 
 
     var mediaType: MediaType

@@ -2,6 +2,8 @@ package org.eltonkola.tvpulse.data.remote.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import org.eltonkola.tvpulse.data.Consts
+import org.eltonkola.tvpulse.data.local.SimpleMedia
 
 
 @Serializable
@@ -33,6 +35,14 @@ data class TrendingMovieDetails(
     val saved: Boolean = false
 )
 
+fun TrendingMovieDetails.toLocalModel() : SimpleMedia {
+    return SimpleMedia(
+        id = id,
+        poster = poster_path ?: backdrop_path ?: Consts.DEFAULT_THUMB_URL
+    )
+}
+
+
 @Serializable
 data class TrendingTvShowDetails(
     val id: Int,
@@ -52,6 +62,12 @@ data class TrendingTvShowDetails(
     val adult: Boolean,
     val saved: Boolean = false
 )
+fun TrendingTvShowDetails.toLocalModel() : SimpleMedia {
+    return SimpleMedia(
+        id = id,
+        poster = poster_path ?: backdrop_path ?: Consts.DEFAULT_THUMB_URL
+    )
+}
 
 
 @Serializable
@@ -107,7 +123,18 @@ data class TvShowDetails(
     val adult: Boolean,
     val number_of_episodes: Int,
     val number_of_seasons: Int,
-    val seasons: List<Seasons>
+    val seasons: List<Seasons>,
+
+
+    val homepage: String? = null,
+    val status : String = "",
+    val tagline : String = "",
+    val belongsToCollection : String ?= null,
+
+
+    //TODO - parse episodes
+   // val next_episode_to_air: String?= null
+
 )
 
 @Serializable

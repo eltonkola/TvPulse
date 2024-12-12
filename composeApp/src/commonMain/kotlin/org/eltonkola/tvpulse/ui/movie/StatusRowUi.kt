@@ -17,6 +17,7 @@ import com.composables.icons.lucide.*
 import org.eltonkola.tvpulse.data.db.model.MediaEntity
 import org.eltonkola.tvpulse.data.db.model.WatchStatus
 import org.eltonkola.tvpulse.data.remote.model.MovieDetails
+import org.eltonkola.tvpulse.data.remote.model.TvShowDetails
 import org.eltonkola.tvpulse.ui.main.explore.tvshows.formatDateToHumanReadable
 
 data class StatusMovieData(
@@ -33,6 +34,25 @@ fun getStatusDataForMovie(movie: MediaEntity?, fullMovie: MovieDetails?): Status
     } else if(fullMovie !=null){
         StatusMovieData(
             releaseDate = fullMovie.release_date.formatDateToHumanReadable(),
+            watched = false,
+        )
+    } else{
+        StatusMovieData(
+            releaseDate = "",
+            watched = false,
+        )
+    }
+}
+
+fun getStatusDataForTvShow(movie: MediaEntity?, fullMovie: TvShowDetails?): StatusMovieData {
+    return if(movie !=null){
+        StatusMovieData(
+            releaseDate = movie.releaseDate?.formatDateToHumanReadable() ?: "",
+            watched = movie.mediaStatus == WatchStatus.COMPLETED,
+        )
+    } else if(fullMovie !=null){
+        StatusMovieData(
+            releaseDate = fullMovie.last_air_date?.formatDateToHumanReadable() ?: "",
             watched = false,
         )
     } else{
