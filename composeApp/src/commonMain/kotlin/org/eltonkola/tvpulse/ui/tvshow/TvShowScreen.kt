@@ -4,13 +4,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -22,10 +20,7 @@ import org.eltonkola.tvpulse.data.local.model.AppsScreen
 import org.eltonkola.tvpulse.data.remote.model.toLocalModel
 import org.eltonkola.tvpulse.expect.openLink
 import org.eltonkola.tvpulse.expect.shareLink
-import org.eltonkola.tvpulse.ui.components.DividerLine
-import org.eltonkola.tvpulse.ui.components.ErrorUi
-import org.eltonkola.tvpulse.ui.components.LazyTabedHeadedList
-import org.eltonkola.tvpulse.ui.components.LoadingUi
+import org.eltonkola.tvpulse.ui.components.*
 import org.eltonkola.tvpulse.ui.movie.*
 
 
@@ -70,7 +65,7 @@ fun TvShowScreen(
                         },
                         Pair("EPISODES") {
                             episodesTab(readyState, viewModel)
-                        }
+                        },
                     ),
                     minHeaderHeight = 120.dp,
                     header = {
@@ -261,6 +256,8 @@ private fun LazyListScope.tvShowMoreTab(
             Spacer(modifier = Modifier.size(16.dp))
         }
 
+
+
     }
 }
 
@@ -278,17 +275,9 @@ private fun LazyListScope.episodesTab(
     } else {
         if(readyState.seasons != null){
             items(readyState.seasons) { season ->
-                Text("SEASON ${season.air_date}")
-                season.episodes.forEach { episode ->
-                    Text(">> ${episode.episode_number} - ${episode.name} - ${episode.air_date}")
-                }
-                DividerLine()
+                SeasonRow(season = season)
+                Spacer(modifier = Modifier.size(2.dp))
             }
-        }
-
-        item {
-            Text("TODO")
-            DividerLine()
         }
 
         item {

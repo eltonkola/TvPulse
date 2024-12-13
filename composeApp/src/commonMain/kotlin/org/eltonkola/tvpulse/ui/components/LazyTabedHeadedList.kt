@@ -36,7 +36,7 @@ fun LazyTabedHeadedList(
     var selectedTabIndex by rememberSaveable { mutableStateOf(0) }
 
     LazyHeadedList(
-        modifier = modifier,
+        modifier = modifier.background(MaterialTheme.colorScheme.surface),
         minHeaderHeight = minHeaderHeight,
         header = {
             Column(

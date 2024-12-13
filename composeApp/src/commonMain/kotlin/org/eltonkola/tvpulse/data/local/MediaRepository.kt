@@ -1,5 +1,6 @@
 package org.eltonkola.tvpulse.data.local
 
+import co.touchlab.kermit.Logger
 import io.realm.kotlin.ext.query
 import io.realm.kotlin.ext.toRealmList
 import kotlinx.coroutines.flow.Flow
@@ -7,6 +8,7 @@ import org.eltonkola.tvpulse.data.db.DbManager
 import org.eltonkola.tvpulse.data.db.model.MediaEntity
 import org.eltonkola.tvpulse.data.db.model.MediaType
 import org.eltonkola.tvpulse.data.db.model.WatchStatus
+import org.eltonkola.tvpulse.data.local.model.SeasonData
 import org.eltonkola.tvpulse.data.remote.model.*
 import org.eltonkola.tvpulse.data.remote.service.TmdbApiClient
 
@@ -146,8 +148,32 @@ class MediaRepository (
         return tmdbApiClient.getActorTvShows(id)
     }
 
-    suspend fun getSeason(tvShowId: Int, season: Int): SeasonResponse {
+    suspend fun getSeason(tvShowId: Int, season: Int): Season {
         return tmdbApiClient.getSeason(tvShowId, season)
     }
+
+    suspend fun getTvShowWithSeasons(
+        id: Int,
+        seasonsNr: Int
+    ): List<SeasonData> {
+        val seasonsPerCall = 20
+        val seasonResponses = mutableListOf<SeasonsResponse>()
+
+        val calls = (seasonsNr / seasonsPerCall) + 1
+
+        for (i in 1..calls) {
+            val startSeason = (i - 1) * seasonsPerCall + 1
+            val endSeason = minOf(i * seasonsPerCall, seasonsNr)
+
+            val seasons = (startSeason..endSeason).joinToString(",") { "season/$it" }
+            val response = tmdbApiClient.getTvShowWithSeasons(id, seasons)
+            seasonResponses.add(response)
+        }
+
+        val all = seasonResponses.flatMap { it -> it.fullSeasons.map { SeasonData(it.key, it.value) } }.toSet().toList()
+        Logger.i("all season data: $all")
+        return all
+    }
+
 
 }

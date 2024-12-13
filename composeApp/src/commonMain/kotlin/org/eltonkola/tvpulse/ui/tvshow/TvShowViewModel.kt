@@ -2,7 +2,6 @@ package org.eltonkola.tvpulse.ui.tvshow
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.realm.kotlin.types.annotations.FullText
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -27,7 +26,7 @@ sealed class TvShowUiState{
         val similar: List<TrendingTvShowDetails>? = null,
         val userOperation: Boolean = false,
         val toastMsg: String? = null,
-        val seasons: List<SeasonResponse>? = null
+        val seasons: List<Season>? = null
         ) : TvShowUiState()
     data class Error(val message: String) : TvShowUiState()
 }
@@ -73,9 +72,13 @@ class TvShowViewModel(
                                 val trailers = mediaRepository.getTvShowTrailers(id)
                                 val cast = mediaRepository.getTvShowsCredits(id).cast
                                 val similar = mediaRepository.getSimilarTvShows(id).results
-                                val seasons = (1..fullTvShow.number_of_seasons).map {
-                                    mediaRepository.getSeason(id, it)
-                                }
+//                                val seasons = (1..fullTvShow.number_of_seasons).map {
+//                                    mediaRepository.getSeason(id, it)
+//                                }
+
+                                val seasonData = mediaRepository.getTvShowWithSeasons(id, fullTvShow.number_of_seasons)
+                                val seasons = seasonData.map { it.season }
+
 
                                 _uiState.update {
                                     TvShowUiState.Ready(
