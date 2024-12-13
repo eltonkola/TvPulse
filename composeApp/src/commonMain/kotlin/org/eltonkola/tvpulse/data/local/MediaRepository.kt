@@ -3,11 +3,11 @@ package org.eltonkola.tvpulse.data.local
 import co.touchlab.kermit.Logger
 import io.realm.kotlin.ext.query
 import io.realm.kotlin.ext.toRealmList
+import io.realm.kotlin.log.RealmLog.remove
+import io.realm.kotlin.types.RealmInstant
 import kotlinx.coroutines.flow.Flow
 import org.eltonkola.tvpulse.data.db.DbManager
-import org.eltonkola.tvpulse.data.db.model.MediaEntity
-import org.eltonkola.tvpulse.data.db.model.MediaType
-import org.eltonkola.tvpulse.data.db.model.WatchStatus
+import org.eltonkola.tvpulse.data.db.model.*
 import org.eltonkola.tvpulse.data.local.model.SeasonData
 import org.eltonkola.tvpulse.data.remote.model.*
 import org.eltonkola.tvpulse.data.remote.service.TmdbApiClient
@@ -175,5 +175,40 @@ class MediaRepository (
         return all
     }
 
+    suspend fun watchEpisodes(showId: Int, episodeIds: List<Int>) {
+        dbManager.writeTransaction {
+            val tvShow: MediaEntity? = query<MediaEntity>("id == $0", showId.toString()).first().find()
+            if (tvShow != null) {
+                // Add multiple episodes
+                val episodes = episodeIds.map { episodeId ->
+                    copyToRealm(EpisodeEntity().apply { id = episodeId })
+                }
+                tvShow.episodes.addAll(episodes)
+                tvShow.updatedTimestamp = RealmInstant.now()
+            } else {
+                println("Show with id $showId not found!")
+            }
+        }
+    }
+
+    suspend fun unWatchEpisodes(showId: Int, episodeIds: List<Int>) {
+        dbManager.writeTransaction {
+            val tvShow: MediaEntity? = query<MediaEntity>("id == $0", showId.toString()).first().find()
+            tvShow?.let {
+                // Remove multiple episodes
+                val episodesToRemove = it.episodes.filter { episode -> episode.id in episodeIds }
+                if (episodesToRemove.isNotEmpty()) {
+                    tvShow.episodes.removeAll(episodesToRemove)
+                    episodesToRemove.forEach { episode ->
+                        delete(episode)
+                    }
+                    tvShow.updatedTimestamp = RealmInstant.now()
+                } else {
+                    println("No matching episodes found in Show $showId!")
+                }
+
+            }
+        }
+    }
 
 }

@@ -17,27 +17,30 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil3.compose.rememberAsyncImagePainter
 import com.composables.icons.lucide.ChevronDown
 import com.composables.icons.lucide.ChevronUp
-import com.composables.icons.lucide.CircleCheck
 import com.composables.icons.lucide.Lucide
 import org.eltonkola.tvpulse.data.remote.model.Episode
 import org.eltonkola.tvpulse.data.remote.model.Season
 import org.eltonkola.tvpulse.ui.components.ProgressUi
+import org.eltonkola.tvpulse.ui.components.UiCheck
 
 @Composable
 fun SeasonRow(
-    season: Season
+    season: Season,
+    watchEpisodes:(List<Int>) -> Unit,
+    unWatchEpisodes:(List<Int>) -> Unit,
+    isExpanded: Boolean,
+    onExpand:() -> Unit
 ) {
-    var isExpanded by rememberSaveable { mutableStateOf(false) }
 
+    val progress = season.episodes.filter { it.isWatched }.size.toFloat() / season.episodes.size
     Column(
-        modifier = Modifier.fillMaxWidth().padding(top = 8.dp)
+        modifier = Modifier.fillMaxWidth().padding(start = 8.dp, end = 8.dp, top = 8.dp)
             .clip(RoundedCornerShape(8.dp))
             .background(MaterialTheme.colorScheme.background)
     ) {
@@ -45,7 +48,7 @@ fun SeasonRow(
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
-                .clickable { isExpanded = !isExpanded }
+                .clickable { onExpand() }
                 .padding(8.dp)
         ) {
             Text(
@@ -55,9 +58,7 @@ fun SeasonRow(
                 modifier = Modifier
             )
 
-            IconButton(onClick = {
-                isExpanded = !isExpanded
-            }) {
+            IconButton(onClick = onExpand) {
                 Icon(
                     imageVector = if (isExpanded) Lucide.ChevronUp else Lucide.ChevronDown,
                     contentDescription = if (isExpanded) "Collapse" else "Expand"
@@ -69,14 +70,21 @@ fun SeasonRow(
                 text = "${season.episodes.filter { it.isWatched }.size} /${season.episodes.size}",
                 style = MaterialTheme.typography.titleMedium,
             )
-            IconButton(onClick = {
 
-            }) {
-                Icon(imageVector = Lucide.CircleCheck, contentDescription = "Watched")
-            }
+            UiCheck(
+                onCheck = {
+                    if(progress == 1f) {
+                        unWatchEpisodes(season.episodes.map { it.id })
+                    }else{
+                        watchEpisodes(season.episodes.map { it.id })
+                    }
+                },
+                checked = season.episodes.map { it.isWatched }.all { it }
+            )
+
         }
         ProgressUi(
-            progress = season.episodes.filter { it.isWatched }.size.toFloat() / season.episodes.size,
+            progress = progress,
             modifier = Modifier.fillMaxWidth(),
         )
 
@@ -84,11 +92,17 @@ fun SeasonRow(
         if (isExpanded) {
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()// Constrain the height of the LazyColumn
+                    .fillMaxWidth()
                     .padding(all = 8.dp)
             ) {
                 season.episodes.forEach { episode ->
-                    EpisodeRow(episode)
+                    EpisodeRow(episode){
+                        if(episode.isWatched) {
+                            unWatchEpisodes(listOf(episode.id))
+                        }else{
+                            watchEpisodes(listOf(episode.id))
+                        }
+                    }
                     Spacer(modifier = Modifier.height(2.dp))
                 }
             }
@@ -97,10 +111,9 @@ fun SeasonRow(
 }
 
 @Composable
-fun EpisodeRow(episode: Episode) {
+fun EpisodeRow(episode: Episode, watchUnwatch:() -> Unit) {
     Row(
         modifier = Modifier.fillMaxWidth()
-            // .padding(bottom = 2.dp)
             .clip(RoundedCornerShape(4.dp))
             .background(MaterialTheme.colorScheme.surface),
         verticalAlignment = Alignment.CenterVertically
@@ -137,10 +150,11 @@ fun EpisodeRow(episode: Episode) {
                 style = MaterialTheme.typography.bodySmall
             )
         }
-        IconButton(onClick = {
 
-        }) {
-            Icon(imageVector = Lucide.CircleCheck, contentDescription = "Watched")
-        }
+        UiCheck(
+            onCheck = watchUnwatch,
+            checked = episode.isWatched
+        )
+
     }
 }

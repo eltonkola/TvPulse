@@ -1,6 +1,9 @@
 package org.eltonkola.tvpulse.data.remote.model
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
 
 @Serializable
@@ -14,7 +17,9 @@ data class SeasonsResponse(
 data class Season(
     val _id: String,
     val air_date: String,
-    val episodes: List<Episode>
+    val episodes: List<Episode>,
+    @Transient
+    var isExpanded: MutableState<Boolean> = mutableStateOf(false)
 )
 
 @Serializable
@@ -33,10 +38,10 @@ data class Episode(
     val vote_average: Double,
     val vote_count: Int,
     val crew: List<CrewMember>,
-    val guest_stars: List<GuestStar>
-){
+    val guest_stars: List<GuestStar>,
+    @Transient
     var isWatched: Boolean = false
-}
+)
 
 @Serializable
 data class GuestStar(

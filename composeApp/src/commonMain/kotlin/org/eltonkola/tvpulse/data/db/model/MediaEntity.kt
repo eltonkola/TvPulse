@@ -1,6 +1,7 @@
 package org.eltonkola.tvpulse.data.db.model
 
 import io.realm.kotlin.ext.realmListOf
+import io.realm.kotlin.types.RealmInstant
 import io.realm.kotlin.types.RealmList
 import io.realm.kotlin.types.RealmObject
 import io.realm.kotlin.types.annotations.PrimaryKey
@@ -54,7 +55,7 @@ class MediaEntity : RealmObject {
 
     var isFavorite: Boolean = false
 
-
+    var updatedTimestamp: RealmInstant = RealmInstant.now() //will use it to trigger flow updates when adding, removing episodes
 
 
 

@@ -18,6 +18,7 @@ import org.eltonkola.tvpulse.data.db.model.MediaEntity
 import org.eltonkola.tvpulse.data.db.model.WatchStatus
 import org.eltonkola.tvpulse.data.remote.model.MovieDetails
 import org.eltonkola.tvpulse.data.remote.model.TvShowDetails
+import org.eltonkola.tvpulse.ui.components.UiCheck
 import org.eltonkola.tvpulse.ui.main.explore.tvshows.formatDateToHumanReadable
 
 data class StatusMovieData(
@@ -99,13 +100,10 @@ fun StatusRowUi(
 
         Spacer(modifier = Modifier.weight(1f))
 
-        IconButton(onClick = onClick){
-            Icon(
-                imageVector = Lucide.CircleCheck,
-                contentDescription = null,
-                tint = if(data.watched) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground,
-            )
-        }
+        UiCheck(
+            onCheck = onClick,
+            checked = data.watched
+        )
 
     }
 }

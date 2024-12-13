@@ -6,6 +6,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -275,7 +276,15 @@ private fun LazyListScope.episodesTab(
     } else {
         if(readyState.seasons != null){
             items(readyState.seasons) { season ->
-                SeasonRow(season = season)
+                SeasonRow(
+                    season = season,
+                    watchEpisodes = viewModel::watchEpisodes,
+                    unWatchEpisodes = viewModel::unWatchEpisodes,
+                    isExpanded = season.isExpanded.value,
+                    onExpand = {
+                        season.isExpanded.value = !season.isExpanded.value
+                    }
+                )
                 Spacer(modifier = Modifier.size(2.dp))
             }
         }
