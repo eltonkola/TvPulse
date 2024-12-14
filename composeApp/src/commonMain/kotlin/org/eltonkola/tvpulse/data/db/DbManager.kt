@@ -10,6 +10,7 @@ import io.realm.kotlin.ext.query
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.eltonkola.tvpulse.data.db.model.*
+import org.eltonkola.tvpulse.data.remote.model.Seasons
 
 
 class DbManager {
@@ -20,7 +21,7 @@ class DbManager {
 
     init{
         val config = RealmConfiguration.Builder(
-            schema = setOf(MediaEntity::class, GenreEntity::class, EpisodeEntity::class)
+            schema = setOf(MediaEntity::class, GenreEntity::class, EpisodeEntity::class, SeasonEntity::class)
         )
             //.encryptionKey(encryptionKey)
             .schemaVersion(1) // Keep the schema version at 1
@@ -43,6 +44,21 @@ class DbManager {
                 title = genreName
             })
     }
+
+    fun getOrCreateSeason(mutableRealm: MutableRealm, season: Seasons): SeasonEntity {
+        return mutableRealm.query<SeasonEntity>("id == $0", season.id).find().firstOrNull()
+            ?: mutableRealm.copyToRealm(SeasonEntity().apply {
+                id = season.id
+                air_date = season.air_date
+                episode_count = season.episode_count
+                name = season.name
+                overview = season.overview
+                poster_path = season.poster_path
+                season_number = season.season_number
+                vote_average = season.vote_average
+            })
+    }
+
 
     fun getMoviesFlow(): Flow<List<MediaEntity>> {
         return realm.query<MediaEntity>("type == $0", MediaType.MOVIE.mediaType).asFlow() // Observe changes

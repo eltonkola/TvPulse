@@ -104,7 +104,7 @@ fun TvShowsTab(
 
 @Composable
 fun TvShowsPosterGrid(
-    movies: List<MediaEntity>,
+    tvShows: List<MediaEntity>,
     onPosterClick: (MediaEntity) -> Unit
 ) {
     LazyVerticalGrid(
@@ -114,10 +114,12 @@ fun TvShowsPosterGrid(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        items(movies) { movie ->
+        items(tvShows) { tvShow ->
             MediaCard(
-                posterUrl = movie.posterPath ?: Consts.DEFAULT_THUMB_URL,
-                onClick = { onPosterClick(movie) }
+                posterUrl = tvShow.posterPath ?: Consts.DEFAULT_THUMB_URL,
+                onClick = { onPosterClick(tvShow) },
+                isTvShow = true,
+                progress = tvShow.progress()
             )
         }
     }

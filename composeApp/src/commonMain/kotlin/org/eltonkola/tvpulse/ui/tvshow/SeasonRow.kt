@@ -10,10 +10,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -74,9 +70,9 @@ fun SeasonRow(
             UiCheck(
                 onCheck = {
                     if(progress == 1f) {
-                        unWatchEpisodes(season.episodes.map { it.id })
+                        unWatchEpisodes(season.episodes.filter { it.isWatched }.map { it.id })
                     }else{
-                        watchEpisodes(season.episodes.map { it.id })
+                        watchEpisodes(season.episodes.filter { !it.isWatched }.map { it.id })
                     }
                 },
                 checked = season.episodes.map { it.isWatched }.all { it }

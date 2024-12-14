@@ -37,8 +37,8 @@ data class Episode(
     val still_path: String?="",
     val vote_average: Double,
     val vote_count: Int,
-    val crew: List<CrewMember>,
-    val guest_stars: List<GuestStar>,
+    val crew: List<CrewMember>? = null,
+    val guest_stars: List<GuestStar>? = null,
     @Transient
     var isWatched: Boolean = false
 )

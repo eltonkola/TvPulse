@@ -59,7 +59,11 @@ class MediaRepository (
 
         dbManager.writeTransaction {
             val genres = tvShow.genres.map { genre ->
-                dbManager.getOrCreateGenre(this, genre.id, genre.name) // Pass `this` MutableRealm
+                dbManager.getOrCreateGenre(this, genre.id, genre.name)
+            }
+
+            val seasons = tvShow.seasons.map { season ->
+                dbManager.getOrCreateSeason(this, season)
             }
 
             copyToRealm(MediaEntity().apply{
@@ -77,9 +81,14 @@ class MediaRepository (
                 this.popularity = tvShow.popularity
                 this.numberOfSeasons = tvShow.number_of_seasons
                 this.numberOfEpisodes = tvShow.number_of_episodes
+                this.seasons = seasons.toRealmList()
             })
         }
 
+    }
+
+    //TODO -- will sync the tvshows here, checking if there are new seasons for the tvshows we already have saved locally
+    fun syncTvShows(){
 
     }
 

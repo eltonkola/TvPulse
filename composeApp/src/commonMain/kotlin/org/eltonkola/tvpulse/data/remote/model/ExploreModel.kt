@@ -125,16 +125,23 @@ data class TvShowDetails(
     val number_of_seasons: Int,
     val seasons: List<Seasons>,
 
+    val last_episode_to_air: Episode?,
+    val next_episode_to_air: Episode?,
+    val networks: List<Network>,
 
     val homepage: String? = null,
     val status : String = "",
     val tagline : String = "",
     val belongsToCollection : String ?= null,
 
+)
 
-    //TODO - parse episodes
-   // val next_episode_to_air: String?= null
-
+@Serializable
+data class Network(
+    val id: Int,
+    val logo_path: String? = null,
+    val name: String,
+    val origin_country: String? = null
 )
 
 @Serializable

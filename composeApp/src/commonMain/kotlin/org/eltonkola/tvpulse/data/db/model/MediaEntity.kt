@@ -20,6 +20,14 @@ enum class WatchStatus(val status: String) {
 }
 
 class MediaEntity : RealmObject {
+
+    fun progress(): Float {
+        val totalEpisodes = seasons.sumOf { it.episode_count }
+        val watchedEpisodes = episodes.size
+        if (totalEpisodes == 0) return 0.0f
+        return watchedEpisodes.toFloat() / totalEpisodes.toFloat()
+    }
+
     @PrimaryKey
     var id: Int = 0
     var title: String = ""
@@ -48,7 +56,7 @@ class MediaEntity : RealmObject {
     var numberOfSeasons: Int = 0
     var numberOfEpisodes: Int = 0
     var episodes: RealmList<EpisodeEntity> = realmListOf() //we will use this to track watched episodes
-
+    var seasons: RealmList<SeasonEntity> = realmListOf() //we will use this to track progress in combination with episodes
 
     // For Movies
     var runtime: Int? = null // movie length in minutes
@@ -56,8 +64,6 @@ class MediaEntity : RealmObject {
     var isFavorite: Boolean = false
 
     var updatedTimestamp: RealmInstant = RealmInstant.now() //will use it to trigger flow updates when adding, removing episodes
-
-
 
     var mediaType: MediaType
         get() = MediaType.entries.first { it.mediaType == type }

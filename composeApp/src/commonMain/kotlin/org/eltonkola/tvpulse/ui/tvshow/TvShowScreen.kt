@@ -4,12 +4,13 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -21,9 +22,11 @@ import org.eltonkola.tvpulse.data.local.model.AppsScreen
 import org.eltonkola.tvpulse.data.remote.model.toLocalModel
 import org.eltonkola.tvpulse.expect.openLink
 import org.eltonkola.tvpulse.expect.shareLink
-import org.eltonkola.tvpulse.ui.components.*
+import org.eltonkola.tvpulse.ui.components.DividerLine
+import org.eltonkola.tvpulse.ui.components.ErrorUi
+import org.eltonkola.tvpulse.ui.components.LazyTabedHeadedList
+import org.eltonkola.tvpulse.ui.components.LoadingUi
 import org.eltonkola.tvpulse.ui.movie.*
-
 
 @Composable
 fun TvShowScreen(
@@ -73,7 +76,7 @@ fun TvShowScreen(
                         Column(
                             modifier = Modifier.fillMaxWidth()
                         ) {
-                            MovieHeader(
+                            TvShowHeader(
                                 gethederDataForTvShow(readyState.savedTvShow, readyState.fullDetails),
                                 navController
                             ) {
@@ -224,7 +227,7 @@ private fun LazyListScope.tvShowMoreTab(
             RateMovieRowUi(
                 rate = readyState.savedTvShow?.userRating ?: 0,
                 onRate = {
-                    viewModel.rateMovie(it)
+                    viewModel.rateTvShow(it)
                 }
             )
             DividerLine()
@@ -256,8 +259,6 @@ private fun LazyListScope.tvShowMoreTab(
         item {
             Spacer(modifier = Modifier.size(16.dp))
         }
-
-
 
     }
 }

@@ -1,4 +1,4 @@
-package org.eltonkola.tvpulse.ui.movie
+package org.eltonkola.tvpulse.ui.tvshow
 
 
 import androidx.compose.foundation.background
@@ -21,39 +21,38 @@ import org.eltonkola.tvpulse.data.remote.model.TvShowDetails
 data class HeaderData(
     val posterPath: String,
     val title: String,
-    val runtime: Int,
+    val seasons: String,
     val genres: String,
 )
 
-fun gethederDataForMovie(movie: MediaEntity?, fullMovie: MovieDetails?): HeaderData {
-    return if(movie !=null){
+fun gethederDataForTvShow(tvShow: MediaEntity?, fullTvShow: TvShowDetails?): HeaderData {
+    return if(tvShow !=null){
         HeaderData(
-            posterPath = movie.posterPath ?: "",
-            title = movie.title,
-            runtime = movie.runtime ?: 0,
-            genres = movie.genres.joinToString { it.title }
+            posterPath = tvShow.posterPath ?: "",
+            title = tvShow.title,
+            seasons = "${tvShow.numberOfSeasons} seasons",
+            genres = tvShow.genres.joinToString { it.title }
         )
-    } else if(fullMovie !=null){
+    } else if(fullTvShow !=null){
         HeaderData(
-            posterPath = fullMovie.poster_path ?: "",
-            title = fullMovie.title,
-            runtime = fullMovie.runtime,
-            genres = fullMovie.genres.joinToString { it.name }
+            posterPath = fullTvShow.poster_path ?: "",
+            title = fullTvShow.name,
+            seasons = "${fullTvShow.number_of_seasons} seasons",
+            genres = fullTvShow.genres.joinToString { it.name }
         )
     } else{
         HeaderData(
             posterPath = "",
             title = "",
-            runtime = 0,
+            seasons = "",
             genres = ""
         )
     }
 }
 
-
 @Composable
-fun MovieHeader(
-    movie : HeaderData,
+fun TvShowHeader(
+    tvShow : HeaderData,
     navController: NavController,
     onMenuClick: () -> Unit
 ) {
@@ -64,7 +63,7 @@ fun MovieHeader(
     ) {
 
         AsyncImage(
-            model = "https://image.tmdb.org/t/p/w500/${movie.posterPath}",
+            model = "https://image.tmdb.org/t/p/w500/${tvShow.posterPath}",
             contentDescription = null,
             modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.surface),
             contentScale = ContentScale.Crop
@@ -110,7 +109,7 @@ fun MovieHeader(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = movie.title,
+                    text = tvShow.title,
                     modifier = Modifier.weight(1f),
                     style = MaterialTheme.typography.titleLarge
                 )
@@ -120,8 +119,7 @@ fun MovieHeader(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                   Text(
-                    text = "${movie.runtime.formatRuntime()} · " +
-                            movie.genres,
+                    text = "${tvShow.seasons} · ${tvShow.genres}",
                     modifier = Modifier.fillMaxWidth(),
                     style = MaterialTheme.typography.titleMedium
                 )
@@ -129,24 +127,5 @@ fun MovieHeader(
 
         }
 
-    }
-}
-
-fun Int.formatRuntime(): String {
-    if (this <= 0) return "0 minutes"
-
-    val hours = this / 60
-    val remainingMinutes = this % 60
-
-    return buildString {
-        if (hours > 0) {
-            append("$hours hour")
-            if (hours > 1) append("s") // Make "hour" plural if needed
-            if (remainingMinutes > 0) append(" ")
-        }
-        if (remainingMinutes > 0) {
-            append("$remainingMinutes minute")
-            if (remainingMinutes > 1) append("s") // Make "minute" plural if needed
-        }
     }
 }

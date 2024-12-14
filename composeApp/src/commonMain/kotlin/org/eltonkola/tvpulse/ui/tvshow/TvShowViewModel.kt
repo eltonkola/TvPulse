@@ -3,12 +3,7 @@ package org.eltonkola.tvpulse.ui.tvshow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
-import co.touchlab.kermit.Logger.Companion.a
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import org.eltonkola.tvpulse.DiGraph
 import org.eltonkola.tvpulse.data.db.model.MediaEntity
@@ -61,7 +56,8 @@ class TvShowViewModel(
                     if(localTvShow !== null && uiState.value is TvShowUiState.Ready && (uiState.value as TvShowUiState.Ready).seasons !=null){
                         val seasons = (uiState.value as TvShowUiState.Ready).seasons
                         val seasonsEdited = seasons!!.map {
-                            it.copy(episodes = it.episodes.map { episode ->
+                            it.copy(
+                                episodes = it.episodes.map { episode ->
                                 episode.copy(
                                     isWatched = localTvShow.episodes.any { it.id == episode.id }
                                 )
@@ -72,6 +68,7 @@ class TvShowViewModel(
                         _uiState.update {
                             (uiState.value as TvShowUiState.Ready).copy(
                                 seasons = seasonsEdited,
+                                savedTvShow = localTvShow,
                             )
                         }
 
@@ -228,7 +225,7 @@ class TvShowViewModel(
     }
 
 
-    fun rateMovie(rate: Int) {
+    fun rateTvShow(rate: Int) {
         viewModelScope.launch {
             if (uiState.value is TvShowUiState.Ready) {
                 mediaRepository.setMediaRating(rate, id)
