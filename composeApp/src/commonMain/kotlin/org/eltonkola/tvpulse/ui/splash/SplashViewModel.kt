@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.eltonkola.tvpulse.DiGraph
 import org.eltonkola.tvpulse.data.local.AppSettings
+import org.eltonkola.tvpulse.data.local.MediaRepository
 
 sealed class SplashOpState{
     data object Loading : SplashOpState()
@@ -25,7 +26,8 @@ data class SplashUiState(
 )
 
 class SplashViewModel(
-    private val appSettings: AppSettings = DiGraph.appSettings
+    private val appSettings: AppSettings = DiGraph.appSettings,
+    private val mediaRepository: MediaRepository = DiGraph.mediaRepository
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(SplashUiState())
     val uiState: StateFlow<SplashUiState> = _uiState.asStateFlow()
@@ -34,10 +36,14 @@ class SplashViewModel(
         viewModelScope.launch {
                 val isFirstLaunch = appSettings.isFirstLaunch()
                 Logger.i{ "isFirstLaunch: $isFirstLaunch" }
-               // delay(1_000)
                 if(isFirstLaunch) {
                     _uiState.update { it.copy(state = SplashOpState.FirstTime) }
                 }else{
+                    try {
+                        mediaRepository.syncTvShows()
+                    }catch (e: Exception) {
+                        e.printStackTrace()
+                    }
                     _uiState.update { it.copy(state = SplashOpState.Ready) }
                 }
 

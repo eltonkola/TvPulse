@@ -10,6 +10,8 @@ import io.realm.kotlin.ext.query
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.eltonkola.tvpulse.data.db.model.*
+import org.eltonkola.tvpulse.data.db.model.MediaEntity.EpisodeDetails
+import org.eltonkola.tvpulse.data.remote.model.Episode
 import org.eltonkola.tvpulse.data.remote.model.Seasons
 
 
@@ -21,7 +23,7 @@ class DbManager {
 
     init{
         val config = RealmConfiguration.Builder(
-            schema = setOf(MediaEntity::class, GenreEntity::class, EpisodeEntity::class, SeasonEntity::class)
+            schema = setOf(MediaEntity::class, GenreEntity::class, EpisodeEntity::class, SeasonEntity::class, EpisodeDetails::class)
         )
             //.encryptionKey(encryptionKey)
             .schemaVersion(1) // Keep the schema version at 1
@@ -188,5 +190,18 @@ class DbManager {
         }
     }
 
+    fun getOrCreateEpisode(mutableRealm: MutableRealm, episode: Episode) : EpisodeDetails {
+        return mutableRealm.query<EpisodeDetails>("id == $0", episode.id).find().firstOrNull()
+            ?: mutableRealm.copyToRealm(EpisodeDetails().apply {
+                id = episode.id
+                airDate = episode.air_date ?: ""
+                episodeNumber = episode.episode_number
+                seasonNumber = episode.season_number
+            })
+    }
+
+    fun getWatchingTvShows(): List<MediaEntity> {
+        return realm.query<MediaEntity>("userWatchStatus == $0 and type == $1", WatchStatus.WATCHING.status, MediaType.TV_SHOW.mediaType).find()
+    }
 
 }

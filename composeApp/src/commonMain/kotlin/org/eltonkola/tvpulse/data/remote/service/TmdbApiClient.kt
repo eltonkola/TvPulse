@@ -12,6 +12,8 @@ import io.ktor.client.engine.cio.*
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.decodeFromJsonElement
 import kotlinx.serialization.json.jsonObject
+import org.eltonkola.tvpulse.data.db.model.MediaEntity
+import org.eltonkola.tvpulse.data.db.model.WatchStatus
 import org.eltonkola.tvpulse.data.remote.model.*
 
 class TmdbApiClient {
@@ -37,6 +39,7 @@ class TmdbApiClient {
 
     private val jsonParser = Json {
         ignoreUnknownKeys = true
+        coerceInputValues = true
     }
 
     private suspend inline fun <reified T> fetchFromApi(endpoint: String): T {
@@ -174,6 +177,7 @@ class TmdbApiClient {
         val endpoint = "$baseUrl/tv/$id?append_to_response=$s"
         return fetchSeasons(endpoint)
     }
+
 
 
 }

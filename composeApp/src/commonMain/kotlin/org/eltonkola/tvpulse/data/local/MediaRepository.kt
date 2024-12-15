@@ -66,6 +66,9 @@ class MediaRepository (
                 dbManager.getOrCreateSeason(this, season)
             }
 
+            val lastEpisodeToAir = tvShow.last_episode_to_air?.let { dbManager.getOrCreateEpisode(this, it) }
+            val nextEpisodeToAir = tvShow.next_episode_to_air?.let { dbManager.getOrCreateEpisode(this, it) }
+
             copyToRealm(MediaEntity().apply{
                 this.id = tvShow.id
                 this.title = tvShow.name
@@ -82,14 +85,62 @@ class MediaRepository (
                 this.numberOfSeasons = tvShow.number_of_seasons
                 this.numberOfEpisodes = tvShow.number_of_episodes
                 this.seasons = seasons.toRealmList()
+                this.lastEpisodeToAir = lastEpisodeToAir
+                this.nextEpisodeToAir = nextEpisodeToAir
             })
         }
 
     }
 
-    //TODO -- will sync the tvshows here, checking if there are new seasons for the tvshows we already have saved locally
-    fun syncTvShows(){
+    //TODO -- will sync the tvShows here, checking if there are new seasons for the tvshows we already have saved locally
+    suspend fun syncTvShows(){
+        //1. take all tvshows we are watching (not all of them, or it would be to many calls )
+        //2. load the full details from server
+        //3. update the local information
+        //4. that is it, now the logic we have will automatically check the progress
+        val tvShows = dbManager.getWatchingTvShows()
+        tvShows.forEach {
+            val tvShow = getFullTvShowById(it.id)
+            dbManager.writeTransaction {
+                // Retrieve the existing MediaEntity by its ID
+                val existingShow = query<MediaEntity>("id == $0", tvShow.id).first().find()
 
+                if (existingShow != null) {
+                    val genres = tvShow.genres.map { genre ->
+                        dbManager.getOrCreateGenre(this, genre.id, genre.name)
+                    }
+
+                    val seasons = tvShow.seasons.map { season ->
+                        dbManager.getOrCreateSeason(this, season)
+                    }
+
+                    val lastEpisodeToAir = tvShow.last_episode_to_air?.let { dbManager.getOrCreateEpisode(this, it) }
+                    val nextEpisodeToAir = tvShow.next_episode_to_air?.let { dbManager.getOrCreateEpisode(this, it) }
+
+                    // Update the existing entity's fields
+                    existingShow.apply {
+                        this.title = tvShow.name
+                        this.posterPath = tvShow.poster_path
+                        this.backdropPath = tvShow.backdrop_path
+                        this.overview = tvShow.overview
+                        this.releaseDate = tvShow.first_air_date
+                        this.genres = genres.toRealmList()
+                        this.originalLanguage = tvShow.original_language
+                        this.voteAverage = tvShow.vote_average
+                        this.voteCount = tvShow.vote_count
+                        this.popularity = tvShow.popularity
+                        this.numberOfSeasons = tvShow.number_of_seasons
+                        this.numberOfEpisodes = tvShow.number_of_episodes
+                        this.seasons = seasons.toRealmList()
+                        this.lastEpisodeToAir = lastEpisodeToAir
+                        this.nextEpisodeToAir = nextEpisodeToAir
+                        this.updatedTimestamp = RealmInstant.now() // Update the timestamp
+                    }
+                } else {
+                    throw IllegalArgumentException("TV Show with ID ${it.id} not found in the database.")
+                }
+            }
+        }
     }
 
     fun getMediaById(id: Int): Flow<MediaEntity?> {
